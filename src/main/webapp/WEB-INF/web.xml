@@ -4,8 +4,16 @@
         <servlet-name>ServiceServlet</servlet-name>
         <servlet-class>com.bluepandora.therap.donatelife.servlet.ServiceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>com.bluepandora.therap.donatelife.servlet.NewServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServiceServlet</servlet-name>
         <url-pattern>/service</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
 </web-app>
