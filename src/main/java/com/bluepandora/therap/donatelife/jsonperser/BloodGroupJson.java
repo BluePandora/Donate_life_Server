@@ -8,7 +8,6 @@ package com.bluepandora.therap.donatelife.jsonperser;
 import com.bluepandora.therap.donatelife.debug.Debug;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import netscape.javascript.JSObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
