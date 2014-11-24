@@ -15,6 +15,7 @@ import com.bluepandora.therap.donatelife.service.DataService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Biswajit Debnath
  */
+@WebServlet(name = "Service", urlPatterns = {"/service"})
 public class ServiceServlet extends HttpServlet {
 
     /**
