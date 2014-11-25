@@ -50,7 +50,9 @@ public class GcmService {
             Debug.debugLog("Donator Message:", donatorMessage);
             List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId);
             Debug.debugLog(gcmIDList);
-            sendNotificationToDonator(request, response, gcmIDList, donatorMessage);
+            if (gcmIDList.size() != 0) {
+                sendNotificationToDonator(request, response, gcmIDList, donatorMessage);
+            }
         }
     }
 
