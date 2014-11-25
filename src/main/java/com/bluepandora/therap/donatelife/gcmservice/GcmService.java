@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GcmService {
 
-    private static final String GOOGLE_SERVER_KEY = "AIzaSyDQFvp7jHnkwZlDrEqcOoQNGq9tPpgmqps";
+    private static final String GOOGLE_SERVER_KEY = "AIzaSyA_1Xk1GFUu_T6bth1erowm4hD6nTCAoFw";
     private static final String MESSAGE_KEY = "message";
 
     private static DatabaseService dbService = new DatabaseService(
@@ -88,12 +88,12 @@ public class GcmService {
     private static void sendNotificationToDonator(HttpServletRequest request, HttpServletResponse response, List donatorList, String donatorMessage) {
         try {
             Sender sender = new Sender(GOOGLE_SERVER_KEY);
-            Message message = new Message.Builder().timeToLive(300)
+            Message message = new Message.Builder()
                     .delayWhileIdle(true).addData(MESSAGE_KEY, donatorMessage)
                     .build();
             sender.send(message, donatorList, 1);
         } catch (IOException ioe) {
-            Debug.debugLog("SENDING NOTIFICATION IO ERROR!");
+            Debug.debugLog("SENDING NOTIFICATION IO EXCEPTION!");
         } catch (Exception error) {
             Debug.debugLog("SENDING NOTIFICATION EXCEPTION!");
         }

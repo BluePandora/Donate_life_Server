@@ -3,19 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//package com.bluepandora.therap.donatelife.gcmservice;
-//
-///**
-// *
-// * @author Biswajit Debnath
-// */
-//public class GcmService {
-//
-//    public static void gcmService() {
-//
-//    }
-//
-//}
 package com.bluepandora.therap.donatelife.gcmservice;
 
 import java.io.IOException;
