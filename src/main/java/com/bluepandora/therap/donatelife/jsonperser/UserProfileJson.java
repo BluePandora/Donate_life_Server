@@ -20,6 +20,8 @@ public class UserProfileJson {
     private static final String GROUP_ID = "groupId";
     private static final String DIST_ID = "distId";
     private static final String DONE = "done";
+    private static final String MESSAGE = "message";
+    
 
     public static JSONObject getUserProfileJson(ResultSet result) throws JSONException {
         JSONArray jsonArray = new JSONArray();
@@ -40,6 +42,7 @@ public class UserProfileJson {
                 jsonObject.put(DONE, 1);
             } else {
                 jsonObject = new JSONObject();
+                jsonObject.put(MESSAGE, "INVALID USER ID OR PASSWORD!");
                 jsonObject.put(DONE, 0);
             }
             
