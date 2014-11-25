@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class UserProfileJson {
 
     private static final String PROFILE = "profile";
@@ -35,9 +34,15 @@ public class UserProfileJson {
                 jsonObject.put(DIST_ID, result.getString("dist_id"));
                 jsonArray.put(jsonObject);
             }
-            jsonObject = new JSONObject();
-            jsonObject.put(PROFILE, jsonArray);
-            jsonObject.put(DONE, 1);
+            if (jsonArray.length() != 0) {
+                jsonObject = new JSONObject();
+                jsonObject.put(PROFILE, jsonArray);
+                jsonObject.put(DONE, 1);
+            } else {
+                jsonObject = new JSONObject();
+                jsonObject.put(DONE, 0);
+            }
+            
         } catch (SQLException error) {
             Debug.debugLog("USER PROFILE RESULT DATA : ", error);
             jsonObject = new JSONObject();

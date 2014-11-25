@@ -21,7 +21,7 @@ public class DbTimestamp {
 
     public static String getTimeStamp() throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+6.00"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("BDT"));
         Date date = dateFormat.parse(dateFormat.format(new Date()));
         Timestamp timestamp = new Timestamp(date.getTime());
         return timestamp.toString();
