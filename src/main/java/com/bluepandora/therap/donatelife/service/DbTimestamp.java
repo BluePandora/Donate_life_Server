@@ -20,7 +20,7 @@ import java.util.TimeZone;
 public class DbTimestamp {
 
     public static String getTimeStamp() throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS", Locale.UK);
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SSS");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+6.00"));
         Date date = dateFormat.parse(dateFormat.format(new Date()));
         Timestamp timestamp = new Timestamp(date.getTime());
