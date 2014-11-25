@@ -181,7 +181,8 @@ public class AUService {
                 && request.getParameter("hospitalId") != null
                 && request.getParameter("amount") != null
                 && request.getParameter("emergency") != null
-                && request.getParameter("keyWord") != null) {
+                && request.getParameter("keyWord") != null
+                && request.getParameter("reqTime")!=null){
 
             String mobileNumber = request.getParameter("mobileNumber");
             String groupId = request.getParameter("groupId");
@@ -189,7 +190,7 @@ public class AUService {
             String amount = request.getParameter("amount");
             String emergency = request.getParameter("emergency");
             String keyWord = request.getParameter("keyWord");
-            String reqTime = DbTimestamp.getTimeStamp();
+            String reqTime = request.getParameter("reqTime");
 
             boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
 
