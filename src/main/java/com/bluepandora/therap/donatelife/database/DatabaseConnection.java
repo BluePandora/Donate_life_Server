@@ -67,22 +67,22 @@ public class DatabaseConnection {
 
     private void setDatabaseType(String databaseType) {
         this.databaseType = databaseType;
-        System.out.println("Type:" + databaseType);
+       // System.out.println("Type:" + databaseType);
     }
 
     private void setDatabaseURL(String databaseURL) {
         this.databaseURL = databaseURL;
-        System.out.println("DatabaseURL:" + databaseURL);
+       // System.out.println("DatabaseURL:" + databaseURL);
     }
 
     private void setUserName(String userName) {
         this.userName = userName;
-        System.out.println("Username:" + userName);
+        //System.out.println("Username:" + userName);
     }
 
     private void setPassWord(String passWord) {
         this.passWord = passWord;
-        System.out.println("Password:" + passWord);
+       // System.out.println("Password:" + passWord);
     }
 
 }

@@ -32,5 +32,6 @@ public class Enum {
     public static final String MESSAGE_REMOVED_BLOOD_REQUEST = "BLOOD REQUEST REMOVED SUCCESSFULLY!";
     public static final String MESSAGE_INFO_UPDATED= "PERSONAL INFO UPDATED SUCCESSFULLY";
     public static final String MESSAGE_ACCESS_KEY_NOT_MATCHED="SORRY, ACCESS KEY NOT MATCHED!";
+    
 
 }

@@ -44,7 +44,9 @@ public class AdminServlet extends HttpServlet {
 
         if (request.getParameter("requestName") != null && request.getParameter("requestFrom") != null) {
             if (request.getParameter("requestFrom").equals("AdMiN")) {
+
                 String requestName = request.getParameter("requestName");
+
                 if (requestName.equals(AdminRequest.requestDonatorList)) {
                     AdminService.getDonatorList(request, response);
                 } else if (requestName.equals(AdminRequest.requestMobileNumberDetail)) {
@@ -57,6 +59,7 @@ public class AdminServlet extends HttpServlet {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "UNKNOWN SERVICE NAME!");
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 }
+                
             } else {
                 JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "UNAUTHORIZE ACCESS!");
                 SendJsonData.sendJsonData(request, response, jsonObject);
