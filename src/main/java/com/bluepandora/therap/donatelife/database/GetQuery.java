@@ -65,7 +65,7 @@ public class GetQuery extends DbConstant {
     }
 
     public static String addFeedback(String username, String comments) {
-        return "insert into " + T_FEEDBACK + " values('" + username + "','" + comments + "')";
+        return "insert into " + T_FEEDBACK + " (username, comments) values('" + username + "','" + comments + "')";
     }
 
     public static String updateGCMIdQuery(String mobileNumber, String gcmId) {
