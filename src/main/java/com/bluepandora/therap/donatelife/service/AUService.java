@@ -287,7 +287,7 @@ public class AUService {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
+                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 }
             } else {
