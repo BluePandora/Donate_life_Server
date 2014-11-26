@@ -52,7 +52,7 @@ public class AdminService {
     
     public static void getMobileNumberDetail(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
-        
+        Debug.debugLog("MobileNumber Detail Method");
         if (request.getParameter("accessKey") != null && request.getParameter("mobileNumber") != null) {
             String accessKey = request.getParameter("accessKey");
             String mobileNumber = request.getParameter("mobileNumber");
@@ -78,7 +78,7 @@ public class AdminService {
     
     public static void getDonatorList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
-        
+        Debug.debugLog("Donator List  Method");
         if (request.getParameter("distName")!=null
                 && request.getParameter("accessKey") != null
                 && request.getParameter("groupName")!=null) {
@@ -112,6 +112,7 @@ public class AdminService {
     
     public static void getAdminList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
+        Debug.debugLog("Admin List  Method");
         if (request.getParameter("accessKey") != null) {
             
             String accessKey = request.getParameter("accessKey");
@@ -139,6 +140,7 @@ public class AdminService {
     
     public static void getFeedBackList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
+        Debug.debugLog("FeedBack List  Method");
         if (request.getParameter("accessKey") != null) {
             
             String accessKey = request.getParameter("accessKey");
