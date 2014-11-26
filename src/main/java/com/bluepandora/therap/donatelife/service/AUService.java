@@ -278,7 +278,7 @@ public class AUService {
             if (donationDetail.equals("")) {
                 donationDetail = null;
             }
-            Debug.debugLog("MobileNumber: ", mobileNumber, "Date: ", donationDate, "Details: ", donationDate);
+            Debug.debugLog("MobileNumber: ", mobileNumber, "Date: ", donationDate, "Details: ", donationDetail);
             if (mobileNumber != null && donationDate != null && donationDetail != null) {
                 String query = GetQuery.addDonationRecordQuery(mobileNumber, donationDate, donationDetail);
                 Debug.debugLog("Add Donation Record Query: " , query);
