@@ -104,7 +104,7 @@ public class GetQuery extends DbConstant {
     }
 
     public static String addDonationRecordQuery(String mobileNumber, String donationDate, String donationDetail) {
-        return "insert into " + T_DONATION_RECORD + " values('" + mobileNumber + "','" + donationDate + "','" + donationDetail + "')";
+        return "insert into " + T_DONATION_RECORD + " (mobile_number, donation_date, donation_detail) values('" + mobileNumber + "','" + donationDate + "','" + donationDetail + "')";
     }
 
     public static String removeDonationRecordQuery(String mobileNumber, String donationDate) {

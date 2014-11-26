@@ -25,5 +25,6 @@ public class DbConstant {
     public static final String T_HOSPITAL = BD_SCHEMA + "." + "hospital";
     public static final String T_FEEDBACK = BD_SCHEMA + "." + "feedback";
     public static final String T_REQUEST_TRACKER = BD_SCHEMA + "." + "request_tracker";
+    public static final String T_ADMIN_PANEL = BD_SCHEMA + "." + "admin_panel";
 
 }

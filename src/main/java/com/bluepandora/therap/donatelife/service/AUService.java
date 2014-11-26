@@ -281,6 +281,7 @@ public class AUService {
 
             if (mobileNumber != null && donationDate != null && donationDetail != null) {
                 String query = GetQuery.addDonationRecordQuery(mobileNumber, donationDate, donationDetail);
+                Debug.debugLog("Add Donation Record Query: " , query);
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
