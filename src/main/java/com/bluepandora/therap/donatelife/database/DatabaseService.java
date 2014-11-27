@@ -24,39 +24,61 @@ public class DatabaseService {
 
     public DatabaseService() {
         databaseConnection = new DatabaseConnection("root", "root");
-        connection = databaseConnection.getDatabaseConnection();
     }
 
     public DatabaseService(String username, String password) {
         databaseConnection = new DatabaseConnection(username, password);
-        connection = databaseConnection.getDatabaseConnection();
     }
 
     public DatabaseService(String databaseType, String databaseURL, String userName, String passWord) {
         databaseConnection = new DatabaseConnection(databaseType, databaseURL, userName, passWord);
-        connection = databaseConnection.getDatabaseConnection();
     }
 
     public ResultSet getResultSet(String query) {
+        
+        if (connection == null) {
+            connectToDatabase();
+        }
+        
         try {
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery(query);
         } catch (SQLException error) {
-            error.printStackTrace();
-
+            System.out.println("SQL Exception Occurs in getResultSet Method!");
         }
         return resultSet;
     }
 
     public boolean queryExcute(String query) {
+        
+        if (connection == null) {
+            connectToDatabase();
+        }
+        
         try {
             statement = (Statement) connection.createStatement();
             statement.execute(query);
             return true;
         } catch (SQLException error) {
-            error.printStackTrace();
+            System.out.println("SQL Exception Occurs in queryExcute Method!");
             return false;
         }
     }
 
+    private void connectToDatabase() {
+        connection = databaseConnection.getDatabaseConnection();
+    }
+
+    private void closeDatabaseConnection() {
+
+        try {
+            if (connection != null) {
+                connection.close();
+                System.out.println("Database Connection Closed!");
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Database Connection Closing Problem! " + error);
+        }
+    }
 }

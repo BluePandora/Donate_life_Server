@@ -33,7 +33,7 @@ public class GcmService {
     private static final String MESSAGE_KEY = "message";
 
     private static DatabaseService dbService = new DatabaseService(
-            DbUser.DATABASETYPE,
+            DbUser.DRIVER_NAME,
             DbUser.DATABASEURL,
             DbUser.USERNAME,
             DbUser.PASSWORD

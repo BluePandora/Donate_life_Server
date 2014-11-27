@@ -29,7 +29,7 @@ import org.json.JSONObject;
 public class AUService {
 
     private static DatabaseService dbService = new DatabaseService(
-            DbUser.DATABASETYPE,
+            DbUser.DRIVER_NAME,
             DbUser.DATABASEURL,
             DbUser.USERNAME,
             DbUser.PASSWORD

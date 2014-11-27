@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class DatabaseConnection {
     
-    private String databaseType;
+    private String driverName;
     private String databaseURL;
     private String userName;
     private String passWord;
@@ -29,8 +29,8 @@ public class DatabaseConnection {
         setDatabaseInfo(databaseURL, userName, passWord);
     }
 
-    public DatabaseConnection(String databaseType, String databaseURL, String userName, String passWord) {
-        setDatabaseInfo(databaseType, databaseURL, userName, passWord);
+    public DatabaseConnection(String driverName, String databaseURL, String userName, String passWord) {
+        setDatabaseInfo(driverName, databaseURL, userName, passWord);
     }
 
     public void setDatabaseInfo(String userName, String passWord) {
@@ -44,8 +44,8 @@ public class DatabaseConnection {
         setPassWord(passWord);
     }
 
-    public void setDatabaseInfo(String databaseType, String databaseURL, String userName, String passWord) {
-        setDatabaseType(databaseType);
+    public void setDatabaseInfo(String driverName, String databaseURL, String userName, String passWord) {
+        setDatabaseType(driverName);
         setDatabaseURL(databaseURL);
         setUserName(userName);
         setPassWord(passWord);
@@ -53,7 +53,7 @@ public class DatabaseConnection {
 
     public Connection getDatabaseConnection() {
         try {
-            Class.forName(databaseType).newInstance();
+            Class.forName(driverName).newInstance();
             System.out.println("Database is connecting...");
             Connection connection = DriverManager.getConnection(databaseURL, userName, passWord);
             System.out.println("Database Connection Successful!");
@@ -65,9 +65,9 @@ public class DatabaseConnection {
         }
     }
 
-    private void setDatabaseType(String databaseType) {
-        this.databaseType = databaseType;
-       // System.out.println("Type:" + databaseType);
+    private void setDatabaseType(String driverName) {
+        this.driverName = driverName;
+       // System.out.println("Type:" + driverName);
     }
 
     private void setDatabaseURL(String databaseURL) {
