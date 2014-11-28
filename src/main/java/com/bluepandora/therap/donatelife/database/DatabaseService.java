@@ -35,11 +35,12 @@ public class DatabaseService {
     }
 
     public ResultSet getResultSet(String query) {
-        
-        if (connection == null) {
-            connectToDatabase();
-        }
-        
+
+        closeDatabaseConnection();
+        closeResultSet();
+        closeStatement();
+        connectToDatabase();
+
         try {
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery(query);
@@ -51,9 +52,10 @@ public class DatabaseService {
 
     public boolean queryExcute(String query) {
         
-        if (connection == null) {
-            connectToDatabase();
-        }
+        closeDatabaseConnection();
+        closeResultSet();
+        closeStatement();
+        connectToDatabase();
         
         try {
             statement = (Statement) connection.createStatement();
@@ -66,6 +68,7 @@ public class DatabaseService {
     }
 
     private void connectToDatabase() {
+
         connection = databaseConnection.getDatabaseConnection();
     }
 
@@ -73,12 +76,40 @@ public class DatabaseService {
 
         try {
             if (connection != null) {
+                System.out.println("Closing Previous Connection!");
                 connection.close();
+                connection=null;
                 System.out.println("Database Connection Closed!");
             }
-
+            
         } catch (SQLException error) {
-            System.out.println("Database Connection Closing Problem! " + error);
+            System.out.println("Problem occurs in closing database connection!" + error);
+        }
+    }
+
+    private void closeResultSet() {
+        try {
+            if (resultSet != null) {
+                System.out.println("Closing Previous ResultSet!");
+                resultSet.close();
+                resultSet = null;
+                System.out.println("Previous ResultSet Closed!");
+            }
+        } catch (SQLException error) {
+            System.out.println("Problem occurs in closing resultset! " + error);
+        }
+    }
+
+    private void closeStatement() {
+        try {
+            if (statement != null) {
+                System.out.println("Closing Previous Statement!");
+                statement.close();
+                statement=null;
+                System.out.println("Previous Statement Closed!");
+            }
+        } catch (SQLException error) {
+            System.out.println("Problem occurs in closing Statement! " + error);
         }
     }
 }
