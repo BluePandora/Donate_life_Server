@@ -321,6 +321,7 @@ public class AUService {
             if (mobileNumber != null && donationDate != null) {
                 String query = GetQuery.removeDonationRecordQuery(mobileNumber, donationDate);
                 boolean done = dbService.queryExcute(query);
+                 Debug.debugLog("Delete Donation Query: ", query);
                 if (done) {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);
