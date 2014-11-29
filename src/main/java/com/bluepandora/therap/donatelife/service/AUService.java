@@ -191,11 +191,14 @@ public class AUService {
             String emergency = request.getParameter("emergency");
             String keyWord = request.getParameter("keyWord");
             String reqTime = request.getParameter("reqTime");
-
+            String date = reqTime.substring(0,10);
+            
+            Debug.debugLog("REQUEST DATE: ", date);
+            
             boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
 
             if (validUser) {
-                int userRequest = CheckService.requestTracker(mobileNumber);
+                int userRequest = CheckService.requestTracker(mobileNumber, date);
                 Debug.debugLog("USER REQUEST: ", userRequest);
                 if (userRequest < 3) {
                     boolean validGroup = CheckService.isDuplicateBloodGroup(mobileNumber, groupId);
@@ -264,7 +267,7 @@ public class AUService {
         if (request.getParameter("mobileNumber") != null
                 && request.getParameter("donationDate") != null
                 && request.getParameter("donationDetail") != null) {
-
+            
             String mobileNumber = request.getParameter("mobileNumber");
             String donationDate = request.getParameter("donationDate");
             String donationDetail = request.getParameter("donationDetail");

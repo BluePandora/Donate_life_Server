@@ -96,8 +96,8 @@ public class CheckService {
         return VALID_HOSPITAL;
     }
 
-    public static int requestTracker(String mobileNumber) {
-        String query = GetQuery.getPersonRequestTrackerQuery(mobileNumber);
+    public static int requestTracker(String mobileNumber, String date) {
+        String query = GetQuery.getPersonRequestTrackerQuery(mobileNumber,date);
         Debug.debugLog("GET REQUEST: ", query);
         ResultSet result = dbService.getResultSet(query);
         int totalRequestFound = 0;

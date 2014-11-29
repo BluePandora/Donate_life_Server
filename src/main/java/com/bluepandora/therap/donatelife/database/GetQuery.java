@@ -93,10 +93,10 @@ public class GetQuery extends DbConstant {
         return "insert into " + T_REQUEST_TRACKER + " (mobile_number, req_time) values ('" + mobileNumber + "','" + reqTime + "')";
     }
 
-    public static String getPersonRequestTrackerQuery(String mobileNumber) {
+    public static String getPersonRequestTrackerQuery(String mobileNumber, String date) {
         return "select * from (select mobile_number, date(req_time) as daily_date, count(*) as daily_request from "
                 + T_REQUEST_TRACKER + " group by mobile_number, date(req_time)) as trs"
-                + " where mobile_number='" + mobileNumber + "' and daily_date like date(now())";
+                + " where mobile_number='" + mobileNumber + "' and daily_date like date("+date+")";
     }
 
     public static String removePersonBloodRequestTrackerQuery(String mobileNumber) {
