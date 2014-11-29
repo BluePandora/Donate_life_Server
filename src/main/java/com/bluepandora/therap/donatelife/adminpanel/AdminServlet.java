@@ -40,7 +40,7 @@ public class AdminServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
-        Debug.debugLog("ADMIN SERVLET HITTED!");
+        Debug.debugLog("ADMIN SERVLET HITTED FROM: "  +  request.getRemoteAddr());
 
         if (request.getParameter("requestName") != null && request.getParameter("requestFrom") != null) {
             if (request.getParameter("requestFrom").equals("AdMiN")) {

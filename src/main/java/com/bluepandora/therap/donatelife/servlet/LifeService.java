@@ -42,7 +42,7 @@ public class LifeService extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
-        Debug.debugLog("SERVICE SERVLET HITTED FROM OUTSIDE!");
+        Debug.debugLog("SERVICE SERVLET HITTED FROM : " + request.getRemoteAddr());
         String requestName = request.getParameter("requestName");
 
         try {
