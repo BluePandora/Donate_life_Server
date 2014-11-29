@@ -96,7 +96,7 @@ public class GetQuery extends DbConstant {
     public static String getPersonRequestTrackerQuery(String mobileNumber, String date) {
         return "select * from (select mobile_number, date(req_time) as daily_date, count(*) as daily_request from "
                 + T_REQUEST_TRACKER + " group by mobile_number, date(req_time)) as trs"
-                + " where mobile_number='" + mobileNumber + "' and daily_date like date("+date+")";
+                + " where mobile_number='" + mobileNumber + "' and daily_date like date('"+date+"')";
     }
 
     public static String removePersonBloodRequestTrackerQuery(String mobileNumber) {
