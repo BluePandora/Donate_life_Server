@@ -6,6 +6,7 @@
 package com.bluepandora.therap.donatelife.jsonperser;
 
 import com.bluepandora.therap.donatelife.debug.Debug;
+import com.bluepandora.therap.donatelife.constant.Enum;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.json.JSONArray;
@@ -36,9 +37,15 @@ public class DonationRecordJson {
                 jsonArray.put(jsonObject);
             }
 
-            jsonObject = new JSONObject();
-            jsonObject.put(DONATION_RECORD, jsonArray);
-            jsonObject.put(DONE, 1);
+            if (jsonArray.length() == 0) {
+                jsonObject = new JSONObject();
+                jsonObject.put(DONATION_RECORD, jsonArray);
+                jsonObject.put(DONE, 1);
+            } else {
+                jsonObject = new JSONObject();
+                jsonObject.put("message", Enum.MESSAGE_DONATION_NOT_FOUND);
+                jsonObject.put(DONE, 0);
+            }
 
         } catch (SQLException error) {
             Debug.debugLog("BLOOD_GROUP RESULT SET: ", error);

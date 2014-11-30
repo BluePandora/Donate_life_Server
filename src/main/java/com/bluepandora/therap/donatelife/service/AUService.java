@@ -5,6 +5,8 @@
  */
 package com.bluepandora.therap.donatelife.service;
 
+import com.bluepandora.therap.donatelife.validation.DataValidation;
+
 import com.bluepandora.therap.donatelife.constant.DbUser;
 import com.bluepandora.therap.donatelife.constant.Enum;
 import com.bluepandora.therap.donatelife.database.DatabaseService;
@@ -63,23 +65,29 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
             String reqTime = request.getParameter("reqTime");
 
-            boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
 
-            if (mobileNumberTaken == false) {
-                addPersonName(firstName, lastName);
-                String query = GetQuery.addPersonInfo(mobileNumber, groupId, distId, keyWord, firstName, lastName);
-                boolean done = dbService.queryExcute(query);
-                if (done) {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
-                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
+                if (mobileNumberTaken == false) {
+                    addPersonName(firstName, lastName);
+                    String query = GetQuery.addPersonInfo(mobileNumber, groupId, distId, keyWord, firstName, lastName);
+                    boolean done = dbService.queryExcute(query);
+                    if (done) {
+                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
+                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                        SendJsonData.sendJsonData(request, response, jsonObject);
+                    } else {
+                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
+                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                        SendJsonData.sendJsonData(request, response, jsonObject);
+                    }
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
+                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_MOBILE_NUMBER_TAKEN);
                     jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 }
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_MOBILE_NUMBER_TAKEN);
+                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
                 SendJsonData.sendJsonData(request, response, jsonObject);
             }
@@ -100,16 +108,7 @@ public class AUService {
             String subject = request.getParameter("subject");
             String comment = request.getParameter("comment");
 
-            if (idUser.equals("")) {
-                idUser = null;
-            }
-            if (subject.equals("")) {
-                subject = null;
-            }
-            if (comment.equals("")) {
-                comment = null;
-            }
-            if (idUser != null && subject != null && comment != null) {
+            if (DataValidation.isValidString(idUser) && DataValidation.isValidString(subject) && DataValidation.isValidString(comment)) {
                 String query = GetQuery.addFeedback(idUser, subject, comment);
                 boolean done = dbService.queryExcute(query);
                 if (done) {
@@ -142,14 +141,7 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
             String gcmId = request.getParameter("gcmId");
 
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
-            if (gcmId.equals("")) {
-                gcmId = null;
-            }
-
-            if (mobileNumber != null && gcmId != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(gcmId)) {
                 String query = GetQuery.updateGCMIdQuery(mobileNumber, gcmId);
                 dbService.queryExcute(query);
                 JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
@@ -173,11 +165,8 @@ public class AUService {
 
         if (request.getParameter("mobileNumber") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
 
-            if (mobileNumber != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber)) {
                 boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber);
                 if (mobileNumberTaken) {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.CORRECT, "done", Enum.CORRECT);
@@ -220,39 +209,43 @@ public class AUService {
             String reqTime = request.getParameter("reqTime");
             String date = reqTime.substring(0, 10);
             Debug.debugLog("Date: ", date);
-            boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
 
-            if (validUser) {
-                int userRequest = CheckService.requestTracker(mobileNumber, date);
-                Debug.debugLog("USER REQUEST: ", userRequest);
-                if (userRequest < Enum.MAX_REQUEST) {
-                    boolean validGroup = CheckService.isDuplicateBloodGroup(mobileNumber, groupId);
-                    Debug.debugLog("VALID GROUP: ", validGroup);
-                    if (validGroup) {
-                        boolean validHospital = CheckService.isDuplicateHospital(mobileNumber, hospitalId);
-                        if (validHospital) {
-                            Debug.debugLog("VALID HOSPITAL: ", validHospital);
-                            String query = GetQuery.addBloodRequestQuery(reqTime, mobileNumber, groupId, amount, hospitalId, emergency);
-                            boolean done = dbService.queryExcute(query);
-                            Debug.debugLog("ADD BR: ", query);
-                            if (done) {
-                                query = GetQuery.addBloodRequestTrackerQuery(mobileNumber, reqTime);
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
+                boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
+                if (validUser) {
+                    int userRequest = CheckService.requestTracker(mobileNumber, date);
+                    Debug.debugLog("USER REQUEST: ", userRequest);
+                    if (userRequest < Enum.MAX_REQUEST) {
+                        boolean validGroup = CheckService.isDuplicateBloodGroup(mobileNumber, groupId);
+                        Debug.debugLog("VALID GROUP: ", validGroup);
+                        if (validGroup) {
+                            boolean validHospital = CheckService.isDuplicateHospital(mobileNumber, hospitalId);
+                            if (validHospital) {
+                                Debug.debugLog("VALID HOSPITAL: ", validHospital);
+                                String query = GetQuery.addBloodRequestQuery(reqTime, mobileNumber, groupId, amount, hospitalId, emergency);
+                                boolean done = dbService.queryExcute(query);
+                                Debug.debugLog("ADD BR: ", query);
+                                if (done) {
+                                    query = GetQuery.addBloodRequestTrackerQuery(mobileNumber, reqTime);
 
-                                Debug.debugLog("REQUEST TRACKER ADDING: ", query);
-                                dbService.queryExcute(query);
-                                GcmService.giveGCMService(request, response);
-                                jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_BLOOD_REQUEST_ADDED, requestName);
+                                    Debug.debugLog("REQUEST TRACKER ADDING: ", query);
+                                    dbService.queryExcute(query);
+                                    GcmService.giveGCMService(request, response);
+                                    jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_BLOOD_REQUEST_ADDED, requestName);
+                                } else {
+                                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
+                                }
                             } else {
-                                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
+                                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_DUPLICATE_HOSPITAL, requestName);
                             }
                         } else {
-                            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_DUPLICATE_HOSPITAL, requestName);
+                            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_DUPLICATE_BLOOD_GROUP, requestName);
                         }
                     } else {
-                        jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_DUPLICATE_BLOOD_GROUP, requestName);
+                        jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_CROSSED_LIMIT, requestName);
                     }
                 } else {
-                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_CROSSED_LIMIT, requestName);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER, requestName);
                 }
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
@@ -260,6 +253,7 @@ public class AUService {
         } else {
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
+
         SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
@@ -269,11 +263,8 @@ public class AUService {
 
         if (request.getParameter("mobileNumber") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
 
-            if (mobileNumber != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber)) {
                 String query = GetQuery.removePersonBloodRequestTrackerQuery(mobileNumber);
                 dbService.queryExcute(query);
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, mobileNumber + Enum.MESSAGE_BLOOD_REQUEST_TRACKER_REMOVED, requestName);
@@ -298,18 +289,9 @@ public class AUService {
             String donationDate = request.getParameter("donationDate");
             String donationDetail = request.getParameter("donationDetail");
 
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
-            if (donationDate.equals("")) {
-                donationDate = null;
-            }
-            if (donationDetail.equals("")) {
-                donationDetail = null;
-            }
             Debug.debugLog("MobileNumber: ", mobileNumber, "Date: ", donationDate, "Details: ", donationDetail);
 
-            if (mobileNumber != null && donationDate != null && donationDetail != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(donationDate) && DataValidation.isValidString(donationDetail)) {
                 String query = GetQuery.addDonationRecordQuery(mobileNumber, donationDate, donationDetail);
                 Debug.debugLog("Add Donation Record Query: ", query);
                 boolean done = dbService.queryExcute(query);
@@ -338,14 +320,7 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
             String donationDate = request.getParameter("donationDate");
 
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
-            if (donationDate.equals("")) {
-                donationDate = null;
-            }
-
-            if (mobileNumber != null && donationDate != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(donationDate)) {
                 String query = GetQuery.removeDonationRecordQuery(mobileNumber, donationDate);
                 boolean done = dbService.queryExcute(query);
                 Debug.debugLog("Del Donation Query: ", query);
@@ -374,14 +349,7 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
             String reqTime = request.getParameter("reqTime");
 
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
-            if (reqTime.equals("")) {
-                reqTime = null;
-            }
-
-            if (mobileNumber != null && reqTime != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(reqTime)) {
                 String query = GetQuery.removeBloodRequestQuery(mobileNumber, reqTime);
                 Debug.debugLog("DELETE BLOOD REQUEST QUERYL:", query);
                 boolean done = dbService.queryExcute(query);
@@ -421,22 +389,28 @@ public class AUService {
             String keyWord = request.getParameter("keyWord");
             String mobileNumber = request.getParameter("mobileNumber");
 
-            boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
-            if (validUser) {
-                addPersonName(firstName, lastName);
-                String query = GetQuery.updatePersonInfoQuery(mobileNumber, keyWord, firstName, lastName, groupId, distId);
-                boolean done = dbService.queryExcute(query);
-                if (done) {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_INFO_UPDATED);
-                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
+                boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
+                if (validUser) {
+                    addPersonName(firstName, lastName);
+                    String query = GetQuery.updatePersonInfoQuery(mobileNumber, keyWord, firstName, lastName, groupId, distId);
+                    boolean done = dbService.queryExcute(query);
+                    if (done) {
+                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_INFO_UPDATED);
+                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                        SendJsonData.sendJsonData(request, response, jsonObject);
+                    } else {
+                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
+                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                        SendJsonData.sendJsonData(request, response, jsonObject);
+                    }
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
+                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
                     jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 }
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
+                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
                 SendJsonData.sendJsonData(request, response, jsonObject);
             }

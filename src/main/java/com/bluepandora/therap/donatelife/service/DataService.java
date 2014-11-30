@@ -19,14 +19,13 @@ import com.bluepandora.therap.donatelife.jsonperser.HospitalJson;
 import com.bluepandora.therap.donatelife.jsonperser.RequestNameAdderJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
 import com.bluepandora.therap.donatelife.jsonperser.UserProfileJson;
+import com.bluepandora.therap.donatelife.validation.DataValidation;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,33 +79,26 @@ public class DataService {
 
     public static void getUserProfile(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
-        boolean USER_FOUND = false;
-
         if (request.getParameter("mobileNumber") != null && request.getParameter("keyWord") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
             String keyWord = request.getParameter("keyWord");
 
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
-
-            if (keyWord.equals("")) {
-                keyWord = null;
-            }
-
-            if (mobileNumber != null && keyWord != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String query = GetQuery.getUserProfileQuery(mobileNumber, keyWord);
                 Debug.debugLog("UserProfile: ", query);
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = UserProfileJson.getUserProfileJson(result);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
                 SendJsonData.sendJsonData(request, response, jsonObject);
-                USER_FOUND = true;
-            }
-        }
 
-        if (USER_FOUND == false) {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "USER NOT FOUND OR INVALID ID!");
+            } else {
+                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
+                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
+                SendJsonData.sendJsonData(request, response, jsonObject);
+            }
+
+        } else {
+            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
             jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
             SendJsonData.sendJsonData(request, response, jsonObject);
         }
@@ -114,30 +106,63 @@ public class DataService {
 
     public static void getUserDonationRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
-        boolean DONATION_RECORD_FOUND = false;
+
         if (request.getParameter("mobileNumber") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
 
-            if (mobileNumber.equals("")) {
-                mobileNumber = null;
-            }
-
-            if (mobileNumber != null) {
+            if (DataValidation.isValidMobileNumber(mobileNumber)) {
+               
                 String query = GetQuery.getDonationRecordQuery(mobileNumber);
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = DonationRecordJson.getDonationRecordJson(result);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
                 SendJsonData.sendJsonData(request, response, jsonObject);
-                DONATION_RECORD_FOUND = true;
+                
+            } else {
+                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
+                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
+                SendJsonData.sendJsonData(request, response, jsonObject);
             }
-        }
-
-        if (DONATION_RECORD_FOUND == false) {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "DONATION RECORD NOT FOUND!");
+            
+        } else {
+            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
             jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
             SendJsonData.sendJsonData(request, response, jsonObject);
         }
+    }
 
+    public static void getDonatorMobileNumber(HttpServletRequest request, HttpServletResponse response) {
+        String requestName = request.getParameter("requestName");
+        
+        if (request.getParameter("mobileNumber") != null
+                && request.getParameter("keyWord") != null
+                && request.getParameter("groupId") != null
+                && request.getParameter("distId") != null
+                && request.getParameter("numDonator") != null) {
+            
+            String mobileNumber = request.getParameter("mobileNumber");
+            String keyWord = request.getParameter("keyWord");
+            String groupId = request.getParameter("groupId");
+            String distId = request.getParameter("distId");
+            String numDonator = request.getParameter("numDonator");
+
+            if (DataValidation.isValidMobileNumber(mobileNumber)
+                && DataValidation.isValidKeyWord(keyWord)
+                && DataValidation.isValidString(groupId)
+                && DataValidation.isValidString(distId)
+                && DataValidation.isValidString(numDonator)) {
+                boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
+                if (validUser) {
+
+                } else {
+
+                }
+            }else{
+                
+            }
+        } else {
+            
+        }
     }
 
     public static void unknownHit(HttpServletRequest request, HttpServletResponse response) throws JSONException {

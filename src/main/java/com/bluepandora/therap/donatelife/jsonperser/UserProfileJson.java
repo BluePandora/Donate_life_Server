@@ -6,6 +6,8 @@
 package com.bluepandora.therap.donatelife.jsonperser;
 
 import com.bluepandora.therap.donatelife.debug.Debug;
+import com.bluepandora.therap.donatelife.constant.Enum;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.json.JSONArray;
@@ -20,8 +22,6 @@ public class UserProfileJson {
     private static final String GROUP_ID = "groupId";
     private static final String DIST_ID = "distId";
     private static final String DONE = "done";
-    private static final String MESSAGE = "message";
-    
 
     public static JSONObject getUserProfileJson(ResultSet result) throws JSONException {
         JSONArray jsonArray = new JSONArray();
@@ -42,10 +42,9 @@ public class UserProfileJson {
                 jsonObject.put(DONE, 1);
             } else {
                 jsonObject = new JSONObject();
-                jsonObject.put(MESSAGE, "INVALID USER ID OR PASSWORD!");
+                jsonObject.put("message", Enum.MESSAGE_INVALID_USER);
                 jsonObject.put(DONE, 0);
             }
-            
         } catch (SQLException error) {
             Debug.debugLog("USER PROFILE RESULT DATA : ", error);
             jsonObject = new JSONObject();
