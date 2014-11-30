@@ -14,6 +14,7 @@ public class Enum {
     public static final int ERROR = 0;
     public static final int CORRECT = 1;
     public static final int MAX_DAY = 2;
+    public static final int MAX_REQUEST=3;
     public static final String MESSAGE_LESS_PARAMETER = "LESS PARAMETER REQUEST!";
     public static final String MESSAGE_INVALID_VALUE = "SORRY, INVALID PARAMTER VALUE!";
     public static final String MESSAGE_DONATION_ADDED = "DONATION RECORDED SUCCESSFULLY";

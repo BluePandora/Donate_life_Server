@@ -52,7 +52,8 @@ public class AUService {
                 && request.getParameter("distId") != null
                 && request.getParameter("groupId") != null
                 && request.getParameter("keyWord") != null
-                && request.getParameter("mobileNumber") != null) {
+                && request.getParameter("mobileNumber") != null
+                && request.getParameter("reqTime") != null) {
 
             String firstName = request.getParameter("firstName").toUpperCase();
             String lastName = request.getParameter("lastName").toUpperCase();
@@ -60,6 +61,7 @@ public class AUService {
             String groupId = request.getParameter("groupId");
             String keyWord = request.getParameter("keyWord");
             String mobileNumber = request.getParameter("mobileNumber");
+            String reqTime = request.getParameter("reqTime");
 
             boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
 
@@ -92,14 +94,39 @@ public class AUService {
     public static void addFeedback(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
         String requestName = request.getParameter("requestName");
-        if (request.getParameter("username") != null && request.getParameter("comments") != null) {
-            String username = request.getParameter("username");
-            String comments = request.getParameter("comments");
-            String query = GetQuery.addFeedback(username, comments);
-            dbService.queryExcute(query);
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_THANKS);
-            jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+        if (request.getParameter("idUser") != null && request.getParameter("subject") != null && request.getParameter("comment") != null) {
+
+            String idUser = request.getParameter("idUser");
+            String subject = request.getParameter("subject");
+            String comment = request.getParameter("comment");
+
+            if (idUser.equals("")) {
+                idUser = null;
+            }
+            if (subject.equals("")) {
+                subject = null;
+            }
+            if (comment.equals("")) {
+                comment = null;
+            }
+            if (idUser != null && subject != null && comment != null) {
+                String query = GetQuery.addFeedback(idUser, subject, comment);
+                boolean done = dbService.queryExcute(query);
+                if (done) {
+                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_THANKS);
+                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                    SendJsonData.sendJsonData(request, response, jsonObject);
+                } else {
+                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
+                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                    SendJsonData.sendJsonData(request, response, jsonObject);
+                }
+
+            } else {
+                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
+                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+                SendJsonData.sendJsonData(request, response, jsonObject);
+            }
 
         } else {
             JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
@@ -175,14 +202,14 @@ public class AUService {
 
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject;
-
+        Debug.debugLog("RequestName: ", requestName);
         if (request.getParameter("mobileNumber") != null
                 && request.getParameter("groupId") != null
                 && request.getParameter("hospitalId") != null
                 && request.getParameter("amount") != null
                 && request.getParameter("emergency") != null
                 && request.getParameter("keyWord") != null
-                && request.getParameter("reqTime")!=null){
+                && request.getParameter("reqTime") != null) {
 
             String mobileNumber = request.getParameter("mobileNumber");
             String groupId = request.getParameter("groupId");
@@ -191,16 +218,14 @@ public class AUService {
             String emergency = request.getParameter("emergency");
             String keyWord = request.getParameter("keyWord");
             String reqTime = request.getParameter("reqTime");
-            String date = reqTime.substring(0,10);
-            
-            Debug.debugLog("REQUEST DATE: ", date);
-            
+            String date = reqTime.substring(0, 10);
+            Debug.debugLog("Date: ", date);
             boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
 
             if (validUser) {
                 int userRequest = CheckService.requestTracker(mobileNumber, date);
                 Debug.debugLog("USER REQUEST: ", userRequest);
-                if (userRequest < 3) {
+                if (userRequest < Enum.MAX_REQUEST) {
                     boolean validGroup = CheckService.isDuplicateBloodGroup(mobileNumber, groupId);
                     Debug.debugLog("VALID GROUP: ", validGroup);
                     if (validGroup) {
@@ -209,9 +234,10 @@ public class AUService {
                             Debug.debugLog("VALID HOSPITAL: ", validHospital);
                             String query = GetQuery.addBloodRequestQuery(reqTime, mobileNumber, groupId, amount, hospitalId, emergency);
                             boolean done = dbService.queryExcute(query);
-
+                            Debug.debugLog("ADD BR: ", query);
                             if (done) {
                                 query = GetQuery.addBloodRequestTrackerQuery(mobileNumber, reqTime);
+
                                 Debug.debugLog("REQUEST TRACKER ADDING: ", query);
                                 dbService.queryExcute(query);
                                 GcmService.giveGCMService(request, response);
@@ -267,7 +293,7 @@ public class AUService {
         if (request.getParameter("mobileNumber") != null
                 && request.getParameter("donationDate") != null
                 && request.getParameter("donationDetail") != null) {
-            
+
             String mobileNumber = request.getParameter("mobileNumber");
             String donationDate = request.getParameter("donationDate");
             String donationDetail = request.getParameter("donationDetail");
@@ -282,9 +308,10 @@ public class AUService {
                 donationDetail = null;
             }
             Debug.debugLog("MobileNumber: ", mobileNumber, "Date: ", donationDate, "Details: ", donationDetail);
+
             if (mobileNumber != null && donationDate != null && donationDetail != null) {
                 String query = GetQuery.addDonationRecordQuery(mobileNumber, donationDate, donationDetail);
-                Debug.debugLog("Add Donation Record Query: " , query);
+                Debug.debugLog("Add Donation Record Query: ", query);
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
@@ -321,7 +348,7 @@ public class AUService {
             if (mobileNumber != null && donationDate != null) {
                 String query = GetQuery.removeDonationRecordQuery(mobileNumber, donationDate);
                 boolean done = dbService.queryExcute(query);
-                 Debug.debugLog("Delete Donation Query: ", query);
+                Debug.debugLog("Del Donation Query: ", query);
                 if (done) {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);

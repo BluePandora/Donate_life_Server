@@ -64,8 +64,8 @@ public class GetQuery extends DbConstant {
                 + " select '" + mobileNumber + "'," + groupId + " , " + distId + ",'" + keyWord + "', person_id from " + T_PERSON + " where first_name='" + firstName + "' and last_name='" + lastName + "')";
     }
 
-    public static String addFeedback(String username, String comments) {
-        return "insert into " + T_FEEDBACK + " (username, comments) values('" + username + "','" + comments + "')";
+    public static String addFeedback(String id_user, String subject, String comment) {
+        return "insert into " + T_FEEDBACK + "(id_user, subject, comment) values('"+id_user+"','"+subject+"','"+comment+"')";
     }
 
     public static String updateGCMIdQuery(String mobileNumber, String gcmId) {
@@ -96,7 +96,7 @@ public class GetQuery extends DbConstant {
     public static String getPersonRequestTrackerQuery(String mobileNumber, String date) {
         return "select * from (select mobile_number, date(req_time) as daily_date, count(*) as daily_request from "
                 + T_REQUEST_TRACKER + " group by mobile_number, date(req_time)) as trs"
-                + " where mobile_number='" + mobileNumber + "' and daily_date like date('"+date+"')";
+                + " where mobile_number='" + mobileNumber + "' and daily_date like date('" + date + "')";
     }
 
     public static String removePersonBloodRequestTrackerQuery(String mobileNumber) {
@@ -104,7 +104,7 @@ public class GetQuery extends DbConstant {
     }
 
     public static String addDonationRecordQuery(String mobileNumber, String donationDate, String donationDetail) {
-        return "insert into " + T_DONATION_RECORD + " (mobile_number, donation_date, donation_detail) values('" + mobileNumber + "','" + donationDate + "','" + donationDetail + "')";
+        return "insert into " + T_DONATION_RECORD + " values('" + mobileNumber + "','" + donationDate + "','" + donationDetail + "')";
     }
 
     public static String removeDonationRecordQuery(String mobileNumber, String donationDate) {
@@ -127,8 +127,8 @@ public class GetQuery extends DbConstant {
     public static String deleteBloodRequestBeforeQuery() {
         return "DELETE FROM " + T_BLOOD_REQUEST + " WHERE req_time < (NOW()-interval " + Enum.MAX_DAY + " day)";
     }
-    
-    public static String getPersonNameIdQuery(String firstName,String lastName){
-        return "select * from " + T_PERSON + " where first_name='"+firstName+"' and last_name='"+lastName+"'";
+
+    public static String getPersonNameIdQuery(String firstName, String lastName) {
+        return "select * from " + T_PERSON + " where first_name='" + firstName + "' and last_name='" + lastName + "'";
     }
 }
