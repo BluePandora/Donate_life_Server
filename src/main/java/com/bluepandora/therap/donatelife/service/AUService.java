@@ -48,7 +48,7 @@ public class AUService {
     public static void registerUser(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
         String requestName = request.getParameter("requestName");
-
+        JSONObject jsonObject = null;
         if (request.getParameter("firstName") != null
                 && request.getParameter("lastName") != null
                 && request.getParameter("distId") != null
@@ -64,7 +64,6 @@ public class AUService {
             String keyWord = request.getParameter("keyWord");
             String mobileNumber = request.getParameter("mobileNumber");
             String reqTime = request.getParameter("reqTime");
-
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
@@ -73,90 +72,71 @@ public class AUService {
                     String query = GetQuery.addPersonInfo(mobileNumber, groupId, distId, hashKey, firstName, lastName);
                     boolean done = dbService.queryExcute(query);
                     if (done) {
-                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
-                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                        SendJsonData.sendJsonData(request, response, jsonObject);
+                        jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
                     } else {
-                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
-                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                        SendJsonData.sendJsonData(request, response, jsonObject);
+                        jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                     }
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_MOBILE_NUMBER_TAKEN);
-                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_MOBILE_NUMBER_TAKEN);
                 }
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
-
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-            jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
         }
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void addFeedback(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
         String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
+
         if (request.getParameter("idUser") != null && request.getParameter("subject") != null && request.getParameter("comment") != null) {
 
             String idUser = request.getParameter("idUser");
             String subject = request.getParameter("subject");
             String comment = request.getParameter("comment");
-
             if (DataValidation.isValidString(idUser) && DataValidation.isValidString(subject) && DataValidation.isValidString(comment)) {
                 String query = GetQuery.addFeedback(idUser, subject, comment);
                 boolean done = dbService.queryExcute(query);
                 if (done) {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_THANKS);
-                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_THANKS);
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
-                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                 }
-
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
-
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-            jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
         }
+
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void updateGCMKey(HttpServletRequest request, HttpServletResponse response) throws JSONException {
 
         String requestName = request.getParameter("requsetName");
+        JSONObject jsonObject = null;
         if (request.getParameter("mobileNumber") != null && request.getParameter("gcmId") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
             String gcmId = request.getParameter("gcmId");
-
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(gcmId)) {
                 String query = GetQuery.updateGCMIdQuery(mobileNumber, gcmId);
                 dbService.queryExcute(query);
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-            jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
         }
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void userRegistrationCheck(HttpServletRequest request, HttpServletResponse response) throws JSONException {
@@ -170,20 +150,17 @@ public class AUService {
                 boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber);
                 if (mobileNumberTaken) {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.CORRECT, "done", Enum.CORRECT);
-
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.ERROR, "done", Enum.CORRECT);
-
                 }
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "done", Enum.ERROR, "message", Enum.MESSAGE_INVALID_VALUE);
-
             }
         } else {
             jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "done", Enum.ERROR, "message", Enum.MESSAGE_LESS_PARAMETER);
-
         }
 
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
@@ -208,7 +185,7 @@ public class AUService {
             String keyWord = request.getParameter("keyWord");
             String reqTime = request.getParameter("reqTime");
             String date = reqTime.substring(0, 10);
-           // Debug.debugLog("Date: ", date);
+            // Debug.debugLog("Date: ", date);
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
@@ -282,6 +259,8 @@ public class AUService {
 
         String requestName = request.getParameter("requestName");
 
+        JSONObject jsonObject = null;
+
         if (request.getParameter("mobileNumber") != null
                 && request.getParameter("donationDate") != null
                 && request.getParameter("donationDetail") != null) {
@@ -294,87 +273,75 @@ public class AUService {
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(donationDate) && DataValidation.isValidString(donationDetail)) {
                 String query = GetQuery.addDonationRecordQuery(mobileNumber, donationDate, donationDetail);
-            //    Debug.debugLog("Add Donation Record Query: ", query);
+                //    Debug.debugLog("Add Donation Record Query: ", query);
                 boolean done = dbService.queryExcute(query);
                 if (done) {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
-
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void removeDonationRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
 
         if (request.getParameter("mobileNumber") != null && request.getParameter("donationDate") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
             String donationDate = request.getParameter("donationDate");
-
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(donationDate)) {
                 String query = GetQuery.removeDonationRecordQuery(mobileNumber, donationDate);
                 boolean done = dbService.queryExcute(query);
-              //  Debug.debugLog("Del Donation Query: ", query);
                 if (done) {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
-
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
+
         }
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void removeBloodRequest(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
 
         if (request.getParameter("mobileNumber") != null && request.getParameter("reqTime") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
             String reqTime = request.getParameter("reqTime");
-
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(reqTime)) {
                 String query = GetQuery.removeBloodRequestQuery(mobileNumber, reqTime);
-               // Debug.debugLog("DELETE BLOOD REQUEST QUERY:", query);
+                // Debug.debugLog("DELETE BLOOD REQUEST QUERY:", query);
                 boolean done = dbService.queryExcute(query);
-
                 if (done) {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REMOVED_BLOOD_REQUEST, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REMOVED_BLOOD_REQUEST, requestName);
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
-
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void updateUserPersonalInfo(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
 
         if (request.getParameter("mobileNumber") != null
                 && request.getParameter("groupId") != null
@@ -391,42 +358,34 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-               String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
                 if (validUser) {
                     addPersonName(firstName, lastName);
                     String query = GetQuery.updatePersonInfoQuery(mobileNumber, hashKey, firstName, lastName, groupId, distId);
                     boolean done = dbService.queryExcute(query);
                     if (done) {
-                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_INFO_UPDATED);
-                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                        SendJsonData.sendJsonData(request, response, jsonObject);
+                        jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_INFO_UPDATED);
                     } else {
-                        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
-                        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                        SendJsonData.sendJsonData(request, response, jsonObject);
+                        jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                     }
                 } else {
-                    JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
-                    jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                    SendJsonData.sendJsonData(request, response, jsonObject);
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
                 }
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-            jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
         }
+
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void deleteBloodRequestBefore() {
         String query = GetQuery.deleteBloodRequestBeforeQuery();
         boolean done = dbService.queryExcute(query);
-
         if (done) {
             Debug.debugLog("BLOOD REQUEST BEFORE " + Enum.MAX_DAY + " DAYS IS DELETED");
         } else {
