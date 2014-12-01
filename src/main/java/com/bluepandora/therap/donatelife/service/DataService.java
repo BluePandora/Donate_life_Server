@@ -168,7 +168,7 @@ public class DataService {
     }
 
     public static void unknownHit(HttpServletRequest request, HttpServletResponse response) throws JSONException {
-        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "UNKNOWN REQUEST TO SERVER!");
+        JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_UNKNOWN_HIT);
         SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
