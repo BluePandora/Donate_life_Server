@@ -27,7 +27,7 @@ public class GetQuery extends DbConstant {
     }
 
     public static String getBloodRequestListQuery() {
-        return "select * from " + T_BLOOD_REQUEST + " order by req_time";
+        return "select * from " + T_BLOOD_REQUEST + " order by req_time asc";
     }
 
     public static String getBloodGroupNameQuery(String groupId) {
