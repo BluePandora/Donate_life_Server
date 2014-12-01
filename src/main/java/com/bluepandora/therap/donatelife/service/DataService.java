@@ -84,7 +84,8 @@ public class DataService {
             String keyWord = request.getParameter("keyWord");
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-                String query = GetQuery.getUserProfileQuery(mobileNumber, keyWord);
+                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                String query = GetQuery.getUserProfileQuery(mobileNumber, hashKey);
                 Debug.debugLog("UserProfile: ", query);
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = UserProfileJson.getUserProfileJson(result);
@@ -151,7 +152,8 @@ public class DataService {
                 && DataValidation.isValidString(groupId)
                 && DataValidation.isValidString(distId)
                 && DataValidation.isValidString(numDonator)) {
-                boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
+                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
                 if (validUser) {
 
                 } else {

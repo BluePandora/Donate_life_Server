@@ -1,5 +1,9 @@
 package com.bluepandora.therap.donatelife.validation;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -67,5 +71,25 @@ public class DataValidation {
         word = word.replace(" ","");
         if(word.length()==0) return false;
         return true;
+    }
+    
+    public static String encryptTheKeyWord(String keyWord) {
+
+        if (keyWord == null) {
+            return null;
+        }
+
+        String hashKey = null;
+
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(keyWord.getBytes(), 0, keyWord.length());
+            hashKey = new BigInteger(1, digest.digest()).toString(16);
+            System.out.println("DATA  ENCRYTED!");
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("DATA COUDN'T ENCRYTED!");
+        }
+        return hashKey;
+
     }
 }

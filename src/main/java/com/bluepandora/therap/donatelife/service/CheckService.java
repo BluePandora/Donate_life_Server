@@ -50,8 +50,8 @@ public class CheckService {
         return mobileNumberRegistered;
     }
 
-    public static boolean isValidUser(String mobileNumber, String keyWord) {
-        String query = GetQuery.getValidUserQuery(mobileNumber, keyWord);
+    public static boolean isValidUser(String mobileNumber, String hashKey) {
+        String query = GetQuery.getValidUserQuery(mobileNumber, hashKey);
         Debug.debugLog("VALID USER QUERY: ", query);
         ResultSet result = dbService.getResultSet(query);
         boolean USER_VALID = false;

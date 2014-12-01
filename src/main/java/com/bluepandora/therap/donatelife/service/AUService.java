@@ -66,11 +66,11 @@ public class AUService {
             String reqTime = request.getParameter("reqTime");
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-
+                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
                 if (mobileNumberTaken == false) {
                     addPersonName(firstName, lastName);
-                    String query = GetQuery.addPersonInfo(mobileNumber, groupId, distId, keyWord, firstName, lastName);
+                    String query = GetQuery.addPersonInfo(mobileNumber, groupId, distId, hashKey, firstName, lastName);
                     boolean done = dbService.queryExcute(query);
                     if (done) {
                         JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
@@ -211,7 +211,8 @@ public class AUService {
             Debug.debugLog("Date: ", date);
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-                boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
+                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
                 if (validUser) {
                     int userRequest = CheckService.requestTracker(mobileNumber, date);
                     Debug.debugLog("USER REQUEST: ", userRequest);
@@ -390,10 +391,11 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-                boolean validUser = CheckService.isValidUser(mobileNumber, keyWord);
+               String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
                 if (validUser) {
                     addPersonName(firstName, lastName);
-                    String query = GetQuery.updatePersonInfoQuery(mobileNumber, keyWord, firstName, lastName, groupId, distId);
+                    String query = GetQuery.updatePersonInfoQuery(mobileNumber, hashKey, firstName, lastName, groupId, distId);
                     boolean done = dbService.queryExcute(query);
                     if (done) {
                         JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_INFO_UPDATED);
