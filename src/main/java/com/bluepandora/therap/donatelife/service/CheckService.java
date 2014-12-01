@@ -52,7 +52,7 @@ public class CheckService {
 
     public static boolean isValidUser(String mobileNumber, String hashKey) {
         String query = GetQuery.getValidUserQuery(mobileNumber, hashKey);
-        Debug.debugLog("VALID USER QUERY: ", query);
+       // Debug.debugLog("VALID USER QUERY: ", query);
         ResultSet result = dbService.getResultSet(query);
         boolean USER_VALID = false;
         try {
@@ -67,7 +67,7 @@ public class CheckService {
 
     public static boolean isDuplicateBloodGroup(String mobileNumber, String groupId) {
         String query = GetQuery.getDuplicateBloodGroupQuery(mobileNumber, groupId);
-        Debug.debugLog("DUPLICATE BLOOD GROUP QUERY: ", query);
+       // Debug.debugLog("DUPLICATE BLOOD GROUP QUERY: ", query);
         ResultSet result = dbService.getResultSet(query);
         boolean VALID_GROUP = true;
         try {
@@ -82,7 +82,7 @@ public class CheckService {
 
     public static boolean isDuplicateHospital(String mobileNumber, String hospitalId) {
         String query = GetQuery.getDuplicateHospitalGroupQuery(mobileNumber, hospitalId);
-        Debug.debugLog("DUPLICATE HOSPITAL QUERY: ", query);
+        //Debug.debugLog("DUPLICATE HOSPITAL QUERY: ", query);
         ResultSet result = dbService.getResultSet(query);
         boolean VALID_HOSPITAL = true;
         try {
@@ -98,7 +98,7 @@ public class CheckService {
 
     public static int requestTracker(String mobileNumber, String date) {
         String query = GetQuery.getPersonRequestTrackerQuery(mobileNumber,date);
-        Debug.debugLog("GET REQUEST: ", query);
+       // Debug.debugLog("GET REQUEST: ", query);
         ResultSet result = dbService.getResultSet(query);
         int totalRequestFound = 0;
         String dailyRequest = "0";

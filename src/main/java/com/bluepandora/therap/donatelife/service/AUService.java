@@ -208,7 +208,7 @@ public class AUService {
             String keyWord = request.getParameter("keyWord");
             String reqTime = request.getParameter("reqTime");
             String date = reqTime.substring(0, 10);
-            Debug.debugLog("Date: ", date);
+           // Debug.debugLog("Date: ", date);
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
@@ -294,7 +294,7 @@ public class AUService {
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(donationDate) && DataValidation.isValidString(donationDetail)) {
                 String query = GetQuery.addDonationRecordQuery(mobileNumber, donationDate, donationDetail);
-                Debug.debugLog("Add Donation Record Query: ", query);
+            //    Debug.debugLog("Add Donation Record Query: ", query);
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
@@ -324,7 +324,7 @@ public class AUService {
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(donationDate)) {
                 String query = GetQuery.removeDonationRecordQuery(mobileNumber, donationDate);
                 boolean done = dbService.queryExcute(query);
-                Debug.debugLog("Del Donation Query: ", query);
+              //  Debug.debugLog("Del Donation Query: ", query);
                 if (done) {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
                     SendJsonData.sendJsonData(request, response, jsonObject);
@@ -352,7 +352,7 @@ public class AUService {
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(reqTime)) {
                 String query = GetQuery.removeBloodRequestQuery(mobileNumber, reqTime);
-                Debug.debugLog("DELETE BLOOD REQUEST QUERYL:", query);
+               // Debug.debugLog("DELETE BLOOD REQUEST QUERY:", query);
                 boolean done = dbService.queryExcute(query);
 
                 if (done) {

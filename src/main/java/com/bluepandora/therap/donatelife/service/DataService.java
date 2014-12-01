@@ -86,7 +86,7 @@ public class DataService {
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 String query = GetQuery.getUserProfileQuery(mobileNumber, hashKey);
-                Debug.debugLog("UserProfile: ", query);
+              //  Debug.debugLog("UserProfile: ", query);
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = UserProfileJson.getUserProfileJson(result);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
