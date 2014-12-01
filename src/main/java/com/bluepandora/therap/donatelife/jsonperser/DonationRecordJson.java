@@ -37,7 +37,7 @@ public class DonationRecordJson {
                 jsonArray.put(jsonObject);
             }
 
-            if (jsonArray.length() == 0) {
+            if (jsonArray.length() != 0) {
                 jsonObject = new JSONObject();
                 jsonObject.put(DONATION_RECORD, jsonArray);
                 jsonObject.put(DONE, 1);
