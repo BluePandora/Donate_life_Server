@@ -117,7 +117,7 @@ public class GetQuery extends DbConstant {
 
     public static String getGcmIdOfDonatorQuery(String groupId, String hospitalId, String mobileNumber) {
         return "select mobile_number, gcm_id from " + T_PERSON_INFO + " where group_id = " + groupId + " and dist_id in("
-                + "select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ") and gcm_id is not null and mobile_number!='"+mobileNumber+"'";
+                + "select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ") and (gcm_id is not null or gcm_id!='') and mobile_number!='"+mobileNumber+"'";
     }
     
     public static String getGcmIdOfDonatorQuery(String mobileNumber) {
