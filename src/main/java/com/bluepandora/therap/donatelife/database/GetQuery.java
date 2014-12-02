@@ -115,9 +115,13 @@ public class GetQuery extends DbConstant {
         return "delete from " + T_BLOOD_REQUEST + " where mobile_number='" + mobileNumber + "' and req_time='" + reqTime + "'";
     }
 
-    public static String getGcmIdOfDonatorQuery(String groupId, String hospitalId) {
+    public static String getGcmIdOfDonatorQuery(String groupId, String hospitalId, String mobileNumber) {
         return "select mobile_number, gcm_id from " + T_PERSON_INFO + " where group_id = " + groupId + " and dist_id in("
-                + "select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ") and gcm_id is not null";
+                + "select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ") and gcm_id is not null and mobile_number!='"+mobileNumber+"'";
+    }
+    
+    public static String getGcmIdOfDonatorQuery(String mobileNumber) {
+        return "select gcm_id from " + T_PERSON_INFO + " where mobile_number='"+mobileNumber+"' and gcm_id is not null";
     }
 
     public static String updatePersonInfoQuery(String mobileNumber, String keyWord, String firstName, String lastName, String groupId, String distId) {

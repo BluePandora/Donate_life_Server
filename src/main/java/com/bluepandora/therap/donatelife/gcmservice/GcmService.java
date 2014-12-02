@@ -48,10 +48,25 @@ public class GcmService {
 
             String donatorMessage = getMessage(groupId, hospitalId);
             Debug.debugLog("Donator Message:", donatorMessage);
-            List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId);
+            List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId, mobileNumber);
             Debug.debugLog(gcmIDList);
-            if (gcmIDList.size() != 0) {
+
+            int donatorCount = gcmIDList.size();
+            
+            if (donatorCount != 0) {
                 sendNotificationToDonator(request, response, gcmIDList, donatorMessage);
+            }
+            
+            gcmIDList = FindDonator.findDonatorGCMId(mobileNumber);
+            
+            if (gcmIDList.size() != 0) {
+                
+                if (donatorCount <= 1) {
+                    sendNotificationToDonator(request, response, gcmIDList, "NOTIFICATION SEND TO " + donatorCount + " PERSON");
+                } else {
+                    sendNotificationToDonator(request, response, gcmIDList, "NOTIFICATION SEND TO " + donatorCount + " PERSONS");
+                }
+                
             }
         }
     }
@@ -70,6 +85,7 @@ public class GcmService {
                 groupName = result.getString("group_name");
             }
             query = GetQuery.getHospitalNameQuery(hospitalId);
+
             result = dbService.getResultSet(query);
 
             while (result.next()) {

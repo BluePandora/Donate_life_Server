@@ -34,16 +34,17 @@ public class FindDonator {
      * @param groupId
      * @param hospitalId
      */
-    public static List findDonator(String groupId, String hospitalId) {
-        String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId);
+    public static List findDonator(String groupId, String hospitalId, String mobileNumber) {
+        String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId, mobileNumber);
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<Donator>();
-
+        String gcmId=null;
+        
         try {
             while (result.next()) {
-                String gcmId = result.getString("gcm_id");
-                String mobileNumber = result.getString("mobile_number");
+                 gcmId = result.getString("gcm_id");
+                mobileNumber = result.getString("mobile_number");
                 donatorList.add(new Donator(mobileNumber, gcmId));
             }
         } catch (SQLException error) {
@@ -52,9 +53,16 @@ public class FindDonator {
         return donatorList;
 
     }
-
-    public static List findDonatorGCMId(String groupId, String hospitalId) {
-        String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId);
+    
+    /**
+     * 
+     * @param groupId
+     * @param hospitalId
+     * @param mobileNumber
+     * @return This function will return the List of GCM ID without this mobileNumber's GCM ID;
+     */
+    public static List findDonatorGCMId(String groupId, String hospitalId, String mobileNumber) {
+        String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId,mobileNumber);
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
@@ -65,7 +73,29 @@ public class FindDonator {
                 donatorList.add(gcmId);
             }
         } catch (SQLException error) {
-            Debug.debugLog("FINDING DONATOR SQL EXCEPTION!");
+            Debug.debugLog("FINDING DONATOR'S GCM SQL EXCEPTION!");
+        }
+        return donatorList;
+    }
+    
+    /**
+     * 
+     * @param mobileNumber
+     * @return This function will return the List of GCM ID of this mobile Number
+     */
+    public static List findDonatorGCMId(String mobileNumber){
+         String query = GetQuery.getGcmIdOfDonatorQuery(mobileNumber);
+        Debug.debugLog("FIND DONATOR: ", query);
+        ResultSet result = dbService.getResultSet(query);
+        List donatorList = new ArrayList<String>();
+
+        try {
+            while (result.next()) {
+                String gcmId = result.getString("gcm_id");
+                donatorList.add(gcmId);
+            }
+        } catch (SQLException error) {
+            Debug.debugLog("FINDING DONATOR'S GCM SQL EXCEPTION!");
         }
         return donatorList;
     }
