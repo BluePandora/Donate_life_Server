@@ -66,7 +66,7 @@ public class FindDonator {
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
-
+         Debug.debugLog("DONATOR GCM ID FINDING");
         try {
             while (result.next()) {
                 String gcmId = result.getString("gcm_id");
@@ -88,10 +88,11 @@ public class FindDonator {
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
-
+        Debug.debugLog("REQUESTER GCM ID FINDING");
         try {
             while (result.next()) {
                 String gcmId = result.getString("gcm_id");
+                System.out.println("GCM_ID: " + gcmId);
                 donatorList.add(gcmId);
             }
         } catch (SQLException error) {
