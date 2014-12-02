@@ -12,6 +12,7 @@ package com.bluepandora.therap.donatelife.constant;
 public class Request {
 
     public static final String UPDATE_USER_INFO = "updateUserInfo";
+    public static final String FIND_DONATOR_MOBILE_NUMBER="donatorMobileNumber";
 
     /*DONE*/
     public static final String REGISTER = "register";

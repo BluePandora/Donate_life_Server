@@ -83,7 +83,9 @@ public class LifeService extends HttpServlet {
                     AUService.removeBloodRequest(request, response);
                 } else if (requestName.equals(Request.UPDATE_USER_INFO)) {
                     AUService.updateUserPersonalInfo(request, response);
-                } else {
+                }else if(requestName.equals(Request.FIND_DONATOR_MOBILE_NUMBER)){
+                    DataService.getDonatorMobileNumber(request, response);
+                }else {
                     DataService.unknownHit(request, response);
                 }
             } else {

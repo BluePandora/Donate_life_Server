@@ -15,6 +15,7 @@ import com.bluepandora.therap.donatelife.jsonperser.BloodRequestJson;
 import com.bluepandora.therap.donatelife.jsonperser.DistrictJson;
 import com.bluepandora.therap.donatelife.jsonperser.DonationRecordJson;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
+import com.bluepandora.therap.donatelife.jsonperser.DonatorMobileNumberJson;
 import com.bluepandora.therap.donatelife.jsonperser.HospitalJson;
 import com.bluepandora.therap.donatelife.jsonperser.RequestNameAdderJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
@@ -86,7 +87,7 @@ public class DataService {
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 String query = GetQuery.getUserProfileQuery(mobileNumber, hashKey);
-              //  Debug.debugLog("UserProfile: ", query);
+                //  Debug.debugLog("UserProfile: ", query);
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = UserProfileJson.getUserProfileJson(result);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
@@ -106,65 +107,65 @@ public class DataService {
     }
 
     public static void getUserDonationRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException {
-
+        JSONObject jsonObject = null;
 
         if (request.getParameter("mobileNumber") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber)) {
-               
                 String query = GetQuery.getDonationRecordQuery(mobileNumber);
                 ResultSet result = dbService.getResultSet(query);
-                JSONObject jsonObject = DonationRecordJson.getDonationRecordJson(result);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
-                SendJsonData.sendJsonData(request, response, jsonObject);
-                
+                jsonObject = DonationRecordJson.getDonationRecordJson(result);
             } else {
-                JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-                jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
-                SendJsonData.sendJsonData(request, response, jsonObject);
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
-            
         } else {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-            jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
-            SendJsonData.sendJsonData(request, response, jsonObject);
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
+
         }
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
-    public static void getDonatorMobileNumber(HttpServletRequest request, HttpServletResponse response) {
+    public static void getDonatorMobileNumber(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         String requestName = request.getParameter("requestName");
-        
+        JSONObject jsonObject = null;
+
         if (request.getParameter("mobileNumber") != null
                 && request.getParameter("keyWord") != null
                 && request.getParameter("groupId") != null
-                && request.getParameter("distId") != null
-                && request.getParameter("numDonator") != null) {
-            
+                && request.getParameter("hospitalId") != null) {
+
             String mobileNumber = request.getParameter("mobileNumber");
             String keyWord = request.getParameter("keyWord");
             String groupId = request.getParameter("groupId");
-            String distId = request.getParameter("distId");
-            String numDonator = request.getParameter("numDonator");
+            String hospitalId = request.getParameter("hospitalId");
 
             if (DataValidation.isValidMobileNumber(mobileNumber)
-                && DataValidation.isValidKeyWord(keyWord)
-                && DataValidation.isValidString(groupId)
-                && DataValidation.isValidString(distId)
-                && DataValidation.isValidString(numDonator)) {
+                    && DataValidation.isValidKeyWord(keyWord)
+                    && DataValidation.isValidString(groupId)
+                    && DataValidation.isValidString(hospitalId)) {
+
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+
                 boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
-                if (validUser) {
-
-                } else {
-
-                }
-            }else{
                 
+                if (validUser) {
+                    String query = GetQuery.findBestDonatorQuery(groupId, hospitalId);
+                    ResultSet result = dbService.getResultSet(query);
+                    jsonObject = DonatorMobileNumberJson.getDonatorMobileNumberJson(result);
+                } else {
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
+                }
+            } else {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
         } else {
-            
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
         }
+
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
+        SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
     public static void unknownHit(HttpServletRequest request, HttpServletResponse response) throws JSONException {
