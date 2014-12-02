@@ -70,6 +70,7 @@ public class FindDonator {
         try {
             while (result.next()) {
                 String gcmId = result.getString("gcm_id");
+                System.out.println("GCM_ID: " + gcmId);
                 donatorList.add(gcmId);
             }
         } catch (SQLException error) {
