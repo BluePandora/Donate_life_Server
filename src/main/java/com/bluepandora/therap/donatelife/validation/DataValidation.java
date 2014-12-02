@@ -39,7 +39,7 @@ public class DataValidation {
             return false;
         }
         
-        if (keyWord.length() <= 8) {
+        if (keyWord.length() < 6) {
             return false;
         }
         
