@@ -54,8 +54,7 @@ public class AUService {
                 && request.getParameter("distId") != null
                 && request.getParameter("groupId") != null
                 && request.getParameter("keyWord") != null
-                && request.getParameter("mobileNumber") != null
-                && request.getParameter("reqTime") != null) {
+                && request.getParameter("mobileNumber") != null) {
 
             String firstName = request.getParameter("firstName").toUpperCase();
             String lastName = request.getParameter("lastName").toUpperCase();
@@ -63,7 +62,7 @@ public class AUService {
             String groupId = request.getParameter("groupId");
             String keyWord = request.getParameter("keyWord");
             String mobileNumber = request.getParameter("mobileNumber");
-            String reqTime = request.getParameter("reqTime");
+
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
