@@ -137,6 +137,6 @@ public class GetQuery extends DbConstant {
     }
 
     public static String deleteBloodRequestTrackerQuery(int day) {
-        return "delete from " + T_REQUEST_TRACKER + " where req_time <(NOW()-interval " + day + " day";
+        return "delete from " + T_REQUEST_TRACKER + " where req_time <(NOW()-interval " + day + " day)";
     }
 }
