@@ -125,10 +125,14 @@ public class AUService {
         if (request.getParameter("mobileNumber") != null && request.getParameter("gcmId") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
             String gcmId = request.getParameter("gcmId");
-            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(gcmId)) {
+            if (DataValidation.isValidMobileNumber(mobileNumber)) {
                 String query = GetQuery.updateGCMIdQuery(mobileNumber, gcmId);
-                dbService.queryExcute(query);
-                jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
+                boolean done = dbService.queryExcute(query);
+                if (done) {
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
+                } else {
+                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_GCM_ID_NOT_UPDATED);
+                }
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }

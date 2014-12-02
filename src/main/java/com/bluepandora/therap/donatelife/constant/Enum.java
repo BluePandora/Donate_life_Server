@@ -25,6 +25,7 @@ public class Enum {
     public static final String MESSAGE_DUPLICATE_BLOOD_GROUP = "DUPLICATE BLOOD GROUP REQUEST!";
     public static final String MESSAGE_DUPLICATE_HOSPITAL = "DUPLICATE HOSPITAL REQUEST!";
     public static final String MESSAGE_GCM_ID_UPDATED = "GCM ID UPDATED!";
+    public static final String MESSAGE_GCM_ID_NOT_UPDATED = "GCM ID NOT UPDATED!";
     public static final String MESSAGE_FEEDBACK_THANKS = "THANKS FOR YOUR FEEDBACK!";
     public static final String MESSAGE_REG_SUCCESS = "REGISTRATION SUCCESSFUL!";
     public static final String MESSAGE_MOBILE_NUMBER_TAKEN = "MOBILE NUMBER ALREADY TAKEN!";
