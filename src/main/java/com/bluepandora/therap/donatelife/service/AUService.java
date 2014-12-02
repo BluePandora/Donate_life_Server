@@ -73,6 +73,7 @@ public class AUService {
                     boolean done = dbService.queryExcute(query);
                     if (done) {
                         jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
+                        Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG SCCEUSS");
                     } else {
                         jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                     }
@@ -104,6 +105,7 @@ public class AUService {
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_THANKS);
+                    Debug.debugLog(idUser, " FEEDBACK ADDING SCCEUSS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                 }
@@ -130,6 +132,7 @@ public class AUService {
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
+                    Debug.debugLog("Mobile Number: ", mobileNumber, " GCM UPDATION SCCEUSS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_GCM_ID_NOT_UPDATED);
                 }
@@ -154,6 +157,7 @@ public class AUService {
                 boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber);
                 if (mobileNumberTaken) {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.CORRECT, "done", Enum.CORRECT);
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG CHECKING SCCEUSS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.ERROR, "done", Enum.CORRECT);
                 }
@@ -214,6 +218,7 @@ public class AUService {
                                     dbService.queryExcute(query);
                                     GcmService.giveGCMService(request, response);
                                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_BLOOD_REQUEST_ADDED, requestName);
+                                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD BLOOD REQUEST SCCEUSS");
                                 } else {
                                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                                 }
@@ -250,6 +255,7 @@ public class AUService {
                 String query = GetQuery.removePersonBloodRequestTrackerQuery(mobileNumber);
                 dbService.queryExcute(query);
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, mobileNumber + Enum.MESSAGE_BLOOD_REQUEST_TRACKER_REMOVED, requestName);
+                Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE TRACKER SCCEUSS");
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
@@ -281,6 +287,7 @@ public class AUService {
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD DONATION SCCEUSS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
@@ -305,6 +312,7 @@ public class AUService {
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE DONATION SCCEUSS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
@@ -331,6 +339,7 @@ public class AUService {
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REMOVED_BLOOD_REQUEST, requestName);
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE BLOOD REQUEST SCCEUSS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
@@ -370,6 +379,7 @@ public class AUService {
                     boolean done = dbService.queryExcute(query);
                     if (done) {
                         jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_INFO_UPDATED);
+                        Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " UPDATE USER PROFILE SCCEUSS");
                     } else {
                         jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                     }
