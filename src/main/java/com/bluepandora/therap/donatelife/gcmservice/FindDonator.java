@@ -68,12 +68,15 @@ public class FindDonator {
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
         Debug.debugLog("DONATOR GCM ID FINDING");
+        int validGcmSize = 5;
         try {
             while (result.next()) {
                 mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
                 Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
-                donatorList.add(gcmId);
+                if (gcmId.length() > validGcmSize) {
+                    donatorList.add(gcmId);
+                }
             }
         } catch (SQLException error) {
             Debug.debugLog("FINDING DONATOR'S GCM SQL EXCEPTION!");
@@ -98,7 +101,10 @@ public class FindDonator {
                 mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
                 Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
-                donatorList.add(gcmId);
+                int validGcmSize = 5;
+                if (gcmId.length() > validGcmSize) {
+                    donatorList.add(gcmId);
+                }
             }
         } catch (SQLException error) {
             Debug.debugLog("FINDING DONATOR'S GCM SQL EXCEPTION!");
