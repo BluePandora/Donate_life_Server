@@ -121,7 +121,7 @@ public class GetQuery extends DbConstant {
     }
     
     public static String getGcmIdOfDonatorQuery(String mobileNumber) {
-        return "select gcm_id from " + T_PERSON_INFO + " where mobile_number='"+mobileNumber+"' and gcm_id is not null";
+        return "select mobile_number, gcm_id from " + T_PERSON_INFO + " where mobile_number='"+mobileNumber+"' and gcm_id is not null";
     }
 
     public static String updatePersonInfoQuery(String mobileNumber, String keyWord, String firstName, String lastName, String groupId, String distId) {
