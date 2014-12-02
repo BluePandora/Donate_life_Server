@@ -141,8 +141,8 @@ public class GetQuery extends DbConstant {
     }
 
     public static String findBestDonatorQuery(String groupId, String hospitalId) {
-        return "select * from person_info where mobile_number not in ("
-                + "select mobile_number from donation_record where donation_date > (now()-interval 3 month) "
-                + "group by mobile_number) and group_id="+groupId+" and dist_id=(select dist_id from hospital where hospital_id="+hospitalId+")";
+        return "select * from "+T_PERSON_INFO+" where mobile_number not in ("
+                + "select mobile_number from "+T_DONATION_RECORD+" where donation_date > (now()-interval 3 month) "
+                + "group by mobile_number) and group_id="+groupId+" and dist_id=(select dist_id from "+T_HOSPITAL+" where hospital_id="+hospitalId+")";
     }
 }
