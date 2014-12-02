@@ -59,7 +59,6 @@ public class JsonBuilder {
                 jsonObject.put(jsGroupName, result.getString(dbGroupName));
                 jsonObject.put(jsDistName, result.getString(dbDistName));
                 jsonObject.put(jsGcmId, result.getString(dbGcmId));
-                jsonObject.put(jsKeyWord, result.getString(dbKeyWord));
                 jsonArray.put(jsonObject);
             }
             jsonObject = new JSONObject();

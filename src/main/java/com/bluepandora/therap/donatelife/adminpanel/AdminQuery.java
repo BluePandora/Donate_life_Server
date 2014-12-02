@@ -15,7 +15,7 @@ import com.bluepandora.therap.donatelife.constant.DbConstant;
 public class AdminQuery extends DbConstant{
     
     public static String getMobileDetailQuery(String mobileNumber){
-        return "select mobile_number, first_name, last_name, dist_name, group_name, key_word, gcm_id"
+        return "select mobile_number, first_name, last_name, dist_name, group_name, gcm_id"
                 + " from "+T_PERSON_INFO+" join "+T_PERSON+" using(person_id) join "+T_DISTRICT+" using(dist_id) "
                 + "join "+T_BLOOD_GROUP+" using(group_id) where mobile_number like '%"+mobileNumber+"%'";   
     }
