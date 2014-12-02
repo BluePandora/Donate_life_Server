@@ -62,19 +62,19 @@ public class FindDonator {
      * @return This function will return the List of GCM ID without this
      * mobileNumber's GCM ID;
      */
-    public static List findDonatorGCMId(String groupId, String hospitalId, String mobileNumber) {
-        String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId, mobileNumber);
+    public static List findDonatorGCMId(String groupId, String hospitalId) {
+        String query = GetQuery.findBestDonatorQuery(groupId, hospitalId);
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
         Debug.debugLog("DONATOR GCM ID FINDING");
-        int validGcmSize = 5;
+
         try {
             while (result.next()) {
-                mobileNumber = result.getString("mobile_number");
+                String mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
                 Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
-                if (gcmId.length() > validGcmSize) {
+                if (gcmId.length() > 0) {
                     donatorList.add(gcmId);
                 }
             }

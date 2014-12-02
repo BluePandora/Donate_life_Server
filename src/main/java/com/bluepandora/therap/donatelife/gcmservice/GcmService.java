@@ -48,25 +48,25 @@ public class GcmService {
 
             String donatorMessage = getMessage(groupId, hospitalId);
             Debug.debugLog("Donator Message:", donatorMessage);
-            List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId, mobileNumber);
+            List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId);
             Debug.debugLog(gcmIDList);
 
             int donatorCount = gcmIDList.size();
-            
+
             if (donatorCount != 0) {
                 sendNotificationToDonator(request, response, gcmIDList, donatorMessage);
             }
-            
+
             gcmIDList = FindDonator.findDonatorGCMId(mobileNumber);
-            
+
             if (gcmIDList.size() != 0) {
-                
+
                 if (donatorCount <= 1) {
                     sendNotificationToDonator(request, response, gcmIDList, "NOTIFIED " + donatorCount + " PERSON");
                 } else {
                     sendNotificationToDonator(request, response, gcmIDList, "NOTIFIED " + donatorCount + " PERSONS");
                 }
-                
+
             }
         }
     }
@@ -104,7 +104,7 @@ public class GcmService {
     }
 
     private static void sendNotificationToDonator(HttpServletRequest request, HttpServletResponse response, List donatorList, String donatorMessage) {
-        
+
         try {
             Sender sender = new Sender(GOOGLE_SERVER_KEY);
             Message message = new Message.Builder()

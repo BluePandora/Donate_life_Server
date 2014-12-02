@@ -117,11 +117,11 @@ public class GetQuery extends DbConstant {
 
     public static String getGcmIdOfDonatorQuery(String groupId, String hospitalId, String mobileNumber) {
         return "select mobile_number, gcm_id from " + T_PERSON_INFO + " where group_id = " + groupId + " and dist_id in("
-                + "select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ") and gcm_id is not null and mobile_number!='"+mobileNumber+"'";
+                + "select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ") and gcm_id is not null and mobile_number!='" + mobileNumber + "'";
     }
-    
+
     public static String getGcmIdOfDonatorQuery(String mobileNumber) {
-        return "select mobile_number, gcm_id from " + T_PERSON_INFO + " where mobile_number='"+mobileNumber+"' and gcm_id is not null";
+        return "select mobile_number, gcm_id from " + T_PERSON_INFO + " where mobile_number='" + mobileNumber + "' and gcm_id is not null";
     }
 
     public static String updatePersonInfoQuery(String mobileNumber, String keyWord, String firstName, String lastName, String groupId, String distId) {
@@ -138,5 +138,11 @@ public class GetQuery extends DbConstant {
 
     public static String deleteBloodRequestTrackerQuery(int day) {
         return "delete from " + T_REQUEST_TRACKER + " where req_time <(NOW()-interval " + day + " day)";
+    }
+
+    public static String findBestDonatorQuery(String groupId, String hospitalId) {
+        return "select * from person_info where mobile_number not in ("
+                + "select mobile_number from donation_record where donation_date > (now()-interval 3 month) "
+                + "group by mobile_number) and group_id="+groupId+" and dist_id=(select dist_id from hospital where hospital_id="+hospitalId+")";
     }
 }
