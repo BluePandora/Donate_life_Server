@@ -6,6 +6,7 @@
 package com.bluepandora.therap.donatelife.servlet;
 
 import com.bluepandora.therap.donatelife.constant.Request;
+import com.bluepandora.therap.donatelife.constant.Enum;
 import com.bluepandora.therap.donatelife.debug.Debug;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
@@ -48,8 +49,6 @@ public class LifeService extends HttpServlet {
         try {
             if (requestName != null) {
 
-                AUService.deleteBloodRequestBefore();
-
                 if (requestName.equals(Request.BLOOD_GROUP_LIST)) {
                     DataService.getBloodGroupList(request, response);
                 } else if (requestName.equals(Request.HOSPITAL_LIST)) {
@@ -57,6 +56,7 @@ public class LifeService extends HttpServlet {
                 } else if (requestName.equals(Request.DISTRICT_LIST)) {
                     DataService.getDistrictList(request, response);
                 } else if (requestName.equals(Request.GET_BLOOD_REQUEST)) {
+                    AUService.deleteBloodRequestBefore(Enum.MAX_DAY);
                     DataService.getBloodRequestList(request, response);
                 } else if (requestName.equals(Request.USER_INFO)) {
                     DataService.getUserProfile(request, response);
@@ -71,6 +71,7 @@ public class LifeService extends HttpServlet {
                 } else if (requestName.equals(Request.IS_REGISTER)) {
                     AUService.userRegistrationCheck(request, response);
                 } else if (requestName.equals(Request.ADD_BLOOD_REQUEST)) {
+                    AUService.deleteRequestTracker(Enum.MAX_DAY);
                     AUService.addBloodRequest(request, response);
                 } else if (requestName.equals(Request.REMOVE_TRACKER)) {
                     AUService.removePersonBloodRequestTracker(request, response);
@@ -89,7 +90,7 @@ public class LifeService extends HttpServlet {
                 DataService.unknownHit(request, response);
             }
         } catch (Exception error) {
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(com.bluepandora.therap.donatelife.constant.Enum.ERROR, "PROBLEM ARISE WITH YOUR REQUEST!");
+            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "PROBLEM ARISE WITH YOUR REQUEST!");
             SendJsonData.sendJsonData(request, response, jsonObject);
         }
     }

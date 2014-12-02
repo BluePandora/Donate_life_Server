@@ -65,7 +65,7 @@ public class GetQuery extends DbConstant {
     }
 
     public static String addFeedback(String id_user, String subject, String comment) {
-        return "insert into " + T_FEEDBACK + "(id_user, subject, comment) values('"+id_user+"','"+subject+"','"+comment+"')";
+        return "insert into " + T_FEEDBACK + "(id_user, subject, comment) values('" + id_user + "','" + subject + "','" + comment + "')";
     }
 
     public static String updateGCMIdQuery(String mobileNumber, String gcmId) {
@@ -124,11 +124,15 @@ public class GetQuery extends DbConstant {
         return "update " + T_PERSON_INFO + " set person_id = (select person_id from " + T_PERSON + " where first_name='" + firstName + "' and last_name='" + lastName + "'), group_id=" + groupId + ", dist_id=" + distId + " where mobile_number='" + mobileNumber + "' and key_word='" + keyWord + "'";
     }
 
-    public static String deleteBloodRequestBeforeQuery() {
-        return "DELETE FROM " + T_BLOOD_REQUEST + " WHERE req_time < (NOW()-interval " + Enum.MAX_DAY + " day)";
-    }
-
     public static String getPersonNameIdQuery(String firstName, String lastName) {
         return "select * from " + T_PERSON + " where first_name='" + firstName + "' and last_name='" + lastName + "'";
+    }
+
+    public static String deleteBloodRequestBeforeQuery(int day) {
+        return "DELETE FROM " + T_BLOOD_REQUEST + " WHERE req_time < (NOW()-interval " + day + " day)";
+    }
+
+    public static String deleteBloodRequestTrackerQuery(int day) {
+        return "delete from " + T_REQUEST_TRACKER + " where req_time <(NOW()-interval " + day + " day";
     }
 }

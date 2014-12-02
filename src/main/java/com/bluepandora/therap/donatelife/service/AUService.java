@@ -383,13 +383,23 @@ public class AUService {
         SendJsonData.sendJsonData(request, response, jsonObject);
     }
 
-    public static void deleteBloodRequestBefore() {
-        String query = GetQuery.deleteBloodRequestBeforeQuery();
+    public static void deleteBloodRequestBefore(int day) {
+        String query = GetQuery.deleteBloodRequestBeforeQuery(day);
         boolean done = dbService.queryExcute(query);
         if (done) {
-            Debug.debugLog("BLOOD REQUEST BEFORE " + Enum.MAX_DAY + " DAYS IS DELETED");
+            Debug.debugLog("BLOOD REQUEST BEFORE " + day + " DAYS IS DELETED");
         } else {
             Debug.debugLog("BLOOD REQUEST DELETION OCCURS ERROR!");
+        }
+    }
+
+    public static void deleteRequestTracker(int day) {
+        String query = GetQuery.deleteBloodRequestTrackerQuery(day);
+        boolean done = dbService.queryExcute(query);
+        if (done) {
+            Debug.debugLog("REQUEST TRACKER BEFORE  " + Enum.MAX_DAY + " DAYS IS DELETED");
+        } else {
+            Debug.debugLog("REQUEST TRACKER DELETION OCCURS ERROR!");
         }
     }
 }
