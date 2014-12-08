@@ -87,13 +87,16 @@ public class LifeService extends HttpServlet {
                     DataService.getDonatorMobileNumber(request, response);
                 } else {
                     Debug.debugLog("REQUEST NAME NOT MATCHED!");
+                    Debug.debugURL(request, response);
                     DataService.unknownHit(request, response);
                 }
             } else {
                 Debug.debugLog("NO REQUEST NAME FOUND!");
+                Debug.debugURL(request, response);
                 DataService.unknownHit(request, response);
             }
         } catch (Exception error) {
+            Debug.debugURL(request, response);
             JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "PROBLEM ARISE WITH YOUR REQUEST!");
             SendJsonData.sendJsonData(request, response, jsonObject);
         }

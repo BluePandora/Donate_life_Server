@@ -370,7 +370,7 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-               Debug.debugLog("Valid User");
+             
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
                 if (validUser) {
