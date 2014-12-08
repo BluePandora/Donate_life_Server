@@ -56,6 +56,7 @@ public class LifeService extends HttpServlet {
                 } else if (requestName.equals(Request.DISTRICT_LIST)) {
                     DataService.getDistrictList(request, response);
                 } else if (requestName.equals(Request.GET_BLOOD_REQUEST)) {
+                    Debug.debugURL(request, response);
                     AUService.deleteBloodRequestBefore(Enum.MAX_DAY);
                     DataService.getBloodRequestList(request, response);
                 } else if (requestName.equals(Request.USER_INFO)) {

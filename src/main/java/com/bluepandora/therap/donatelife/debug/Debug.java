@@ -25,6 +25,8 @@ public class Debug {
 
     public static void debugURL(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+        boolean parameterFound=false;
+        
         Enumeration<String> parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String paramName = parameterNames.nextElement();
@@ -35,6 +37,11 @@ public class Debug {
                 System.out.print(paramValue + " ");
             }
             System.out.println("");
+            parameterFound=true;
+        }
+        
+        if(parameterFound==false){
+            System.out.println("NO PARAMTER FOUND IN URL!");
         }
     }
 
