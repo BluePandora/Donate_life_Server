@@ -25,22 +25,24 @@ public class Debug {
 
     public static void debugURL(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        boolean parameterFound=false;
-        
+        boolean parameterFound = false;
+
         Enumeration<String> parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String paramName = parameterNames.nextElement();
-            System.out.print(paramName + ": ");
-            String[] paramValues = request.getParameterValues(paramName);
-            for (int index = 0; index < paramValues.length; index++) {
-                String paramValue = paramValues[index];
-                System.out.print(paramValue + " ");
+            System.out.print("\t"+paramName + ": ");
+            if (!paramName.equals("keyWord")) {
+                String[] paramValues = request.getParameterValues(paramName);
+                for (int index = 0; index < paramValues.length; index++) {
+                    String paramValue = paramValues[index];
+                    System.out.print(paramValue + " ");
+                }
             }
             System.out.println("");
-            parameterFound=true;
+            parameterFound = true;
         }
-        
-        if(parameterFound==false){
+
+        if (parameterFound == false) {
             System.out.println("NO PARAMTER FOUND IN URL!");
         }
     }
