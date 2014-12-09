@@ -198,7 +198,6 @@ public class AUService extends DbUser {
             String keyWord = request.getParameter("keyWord");
             String reqTime = request.getParameter("reqTime");
             String date = reqTime.substring(0, 10);
-            // Debug.debugLog("Date: ", date);
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
@@ -221,7 +220,7 @@ public class AUService extends DbUser {
 
                                     Debug.debugLog("REQUEST TRACKER ADDING: ", query);
                                     dbService.queryExcute(query);
-                                    GcmService.giveGCMService(request, response);
+                                    GcmService.giveGCMService(request, response, dbService);
                                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_BLOOD_REQUEST_ADDED, requestName);
                                     Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD BLOOD REQUEST SCCEUSS");
                                 } else {

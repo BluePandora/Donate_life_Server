@@ -32,23 +32,17 @@ public class GcmService {
     private static final String GOOGLE_SERVER_KEY = "AIzaSyA_1Xk1GFUu_T6bth1erowm4hD6nTCAoFw";
     private static final String MESSAGE_KEY = "message";
 
-    private static DatabaseService dbService = new DatabaseService(
-            DbUser.DRIVER_NAME,
-            DbUser.DATABASE_URL,
-            DbUser.USERNAME,
-            DbUser.PASSWORD
-    );
 
-    public static void giveGCMService(HttpServletRequest request, HttpServletResponse response) {
+    public static void giveGCMService(HttpServletRequest request, HttpServletResponse response, DatabaseService dbService) {
 
         if (request.getParameter("groupId") != null && request.getParameter("hospitalId") != null && request.getParameter("mobileNumber") != null) {
             String groupId = request.getParameter("groupId");
             String hospitalId = request.getParameter("hospitalId");
             String mobileNumber = request.getParameter("mobileNumber");
 
-            String donatorMessage = getMessage(groupId, hospitalId);
+            String donatorMessage = getMessage(groupId, hospitalId, dbService);
             Debug.debugLog("Donator Message:", donatorMessage);
-            List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId);
+            List gcmIDList = FindDonator.findDonatorGCMId(groupId, hospitalId, dbService);
             Debug.debugLog(gcmIDList);
 
             int donatorCount = gcmIDList.size();
@@ -57,7 +51,7 @@ public class GcmService {
                 sendNotificationToDonator(request, response, gcmIDList, donatorMessage);
             }
 
-            gcmIDList = FindDonator.findDonatorGCMId(mobileNumber);
+            gcmIDList = FindDonator.findDonatorGCMId(mobileNumber, dbService);
 
             if (gcmIDList.size() != 0) {
 
@@ -71,7 +65,7 @@ public class GcmService {
         }
     }
 
-    private static String getMessage(String groupId, String hospitalId) {
+    private static String getMessage(String groupId, String hospitalId, DatabaseService dbService) {
         String query = GetQuery.getBloodGroupNameQuery(groupId);
         ResultSet result = dbService.getResultSet(query);
 

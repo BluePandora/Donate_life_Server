@@ -21,14 +21,9 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class FindDonator {
+public class FindDonator{
 
-    private static DatabaseService dbService = new DatabaseService(
-            DbUser.DRIVER_NAME,
-            DbUser.DATABASE_URL,
-            DbUser.USERNAME,
-            DbUser.PASSWORD
-    );
+
 
     /**
      * This method for finding GCM-ID from the Donate Life's database matched
@@ -37,7 +32,8 @@ public class FindDonator {
      * @param groupId
      * @param hospitalId
      */
-    public static List findDonator(String groupId, String hospitalId, String mobileNumber) {
+    public static List findDonator(String groupId, String hospitalId, String mobileNumber, DatabaseService dbService) {
+
         String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId, mobileNumber);
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
@@ -65,7 +61,7 @@ public class FindDonator {
      * @return This function will return the List of GCM ID without this
      * mobileNumber's GCM ID;
      */
-    public static List findDonatorGCMId(String groupId, String hospitalId) {
+    public static List findDonatorGCMId(String groupId, String hospitalId, DatabaseService dbService) {
         String query = GetQuery.findBestDonatorQuery(groupId, hospitalId);
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
@@ -93,7 +89,7 @@ public class FindDonator {
      * @return This function will return the List of GCM ID of this mobile
      * Number
      */
-    public static List findDonatorGCMId(String mobileNumber) {
+    public static List findDonatorGCMId(String mobileNumber, DatabaseService dbService) {
         String query = GetQuery.getGcmIdOfDonatorQuery(mobileNumber);
         Debug.debugLog("FIND DONATOR: ", query);
         ResultSet result = dbService.getResultSet(query);
