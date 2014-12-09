@@ -30,9 +30,8 @@ public class FindDonator {
      * @param groupId
      * @param hospitalId
      */
-    
-    private static final int VALID_GCM_SIZE_GREATER=8;
-    
+    private static final int VALID_GCM_SIZE_GREATER = 8;
+
     public static List findDonator(String groupId, String hospitalId, String mobileNumber, DatabaseService dbService) {
 
         String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId, mobileNumber);
@@ -45,7 +44,7 @@ public class FindDonator {
             while (result.next()) {
                 gcmId = result.getString("gcm_id");
                 mobileNumber = result.getString("mobile_number");
-                
+
                 if (gcmId.length() > VALID_GCM_SIZE_GREATER) {
                     donatorList.add(new Donator(mobileNumber, gcmId));
                 }
@@ -77,8 +76,9 @@ public class FindDonator {
             while (result.next()) {
                 String mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
-                Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
+
                 if (gcmId.length() > VALID_GCM_SIZE_GREATER) {
+                    Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
                     donatorList.add(gcmId);
                 }
             }
@@ -100,14 +100,14 @@ public class FindDonator {
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
         Debug.debugLog("REQUESTER GCM ID FINDING");
-        
+
         try {
             while (result.next()) {
                 mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
-                Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
-                
+
                 if (gcmId.length() > VALID_GCM_SIZE_GREATER) {
+                    Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
                     donatorList.add(gcmId);
                 }
             }

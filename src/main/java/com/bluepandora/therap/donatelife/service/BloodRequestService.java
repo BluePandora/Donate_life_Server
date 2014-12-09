@@ -77,7 +77,7 @@ public class BloodRequestService extends DbUser{
                                     dbService.queryExcute(query);
                                     GcmService.giveGCMService(request, response, dbService);
                                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_BLOOD_REQUEST_ADDED, requestName);
-                                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD BLOOD REQUEST SCCEUSS");
+                                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD BLOOD REQUEST SUCCESS");
                                 } else {
                                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                                 }
@@ -117,7 +117,7 @@ public class BloodRequestService extends DbUser{
                 String query = GetQuery.removePersonBloodRequestTrackerQuery(mobileNumber);
                 dbService.queryExcute(query);
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, mobileNumber + Enum.MESSAGE_BLOOD_REQUEST_TRACKER_REMOVED, requestName);
-                Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE TRACKER SCCEUSS");
+                Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE TRACKER SUCCESS");
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
@@ -143,7 +143,7 @@ public class BloodRequestService extends DbUser{
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REMOVED_BLOOD_REQUEST, requestName);
-                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE BLOOD REQUEST SCCEUSS");
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE BLOOD REQUEST SUCCESS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }

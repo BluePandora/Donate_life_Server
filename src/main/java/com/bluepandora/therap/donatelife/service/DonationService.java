@@ -48,7 +48,7 @@ public class DonationService extends DbUser{
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_ADDED, requestName);
-                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD DONATION SCCEUSS");
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " ADD DONATION SUCCESS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }
@@ -76,7 +76,7 @@ public class DonationService extends DbUser{
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_DONATION_REMOVED, requestName);
-                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE DONATION SCCEUSS");
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE DONATION SUCCESS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
                 }

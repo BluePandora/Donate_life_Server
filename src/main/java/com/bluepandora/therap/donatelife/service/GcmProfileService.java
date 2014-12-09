@@ -44,7 +44,7 @@ public class GcmProfileService extends DbUser {
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_GCM_ID_UPDATED);
-                    Debug.debugLog("Mobile Number: ", mobileNumber, " GCM UPDATION SCCEUSS");
+                    Debug.debugLog("Mobile Number: ", mobileNumber, " GCM UPDATION SUCCESS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_GCM_ID_NOT_UPDATED);
                 }

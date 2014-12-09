@@ -44,7 +44,7 @@ public class FeedBackService extends DbUser{
                 boolean done = dbService.queryExcute(query);
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_THANKS);
-                    Debug.debugLog(idUser, " FEEDBACK ADDING SCCEUSS");
+                    Debug.debugLog(idUser, " FEEDBACK ADDING SUCCESS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                 }

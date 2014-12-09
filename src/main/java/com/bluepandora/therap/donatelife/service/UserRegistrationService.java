@@ -55,7 +55,7 @@ public class UserRegistrationService extends DbUser{
                     boolean done = dbService.queryExcute(query);
                     if (done) {
                         jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REG_SUCCESS);
-                        Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG SCCEUSS");
+                        Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG SUCCESS");
                     } else {
                         jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR);
                     }
