@@ -29,6 +29,6 @@ public class DbUser {
     public static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
     public static final String OPENSHIFT_MYSQL_DB_HOST= System.getenv("OPENSHIFT_MYSQL_DB_HOST");
     public static final String OPENSHIFT_MYSQL_DB_PORT= System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-    public static final String DATABASEURL = "jdbc:mysql://"+OPENSHIFT_MYSQL_DB_HOST+":"+OPENSHIFT_MYSQL_DB_PORT+"/";
+    public static final String DATABASE_URL = "jdbc:mysql://"+OPENSHIFT_MYSQL_DB_HOST+":"+OPENSHIFT_MYSQL_DB_PORT+"/";
 
 }
