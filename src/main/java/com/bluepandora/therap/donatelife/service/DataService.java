@@ -34,51 +34,56 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class DataService {
-
-    private static DatabaseService dbService = new DatabaseService(
-            DbUser.DRIVER_NAME,
-            DbUser.DATABASEURL,
-            DbUser.USERNAME,
-            DbUser.PASSWORD
-    );
+public class DataService extends DbUser {
 
     public static void getBloodGroupList(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, JSONException {
-
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String query = GetQuery.getBloodGroupListQuery();
         ResultSet result = dbService.getResultSet(query);
         JSONObject jsonObject = BloodGroupJson.getJsonBloodGroup(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
 
     }
 
     public static void getHospitalList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
-
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String query = GetQuery.getHospitalListQuery();
         ResultSet result = dbService.getResultSet(query);
         JSONObject jsonObject = HospitalJson.getHospitalJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void getDistrictList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String query = GetQuery.getDistrictListQuery();
         ResultSet result = dbService.getResultSet(query);
         JSONObject jsonObject = DistrictJson.getDistrictJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void getBloodRequestList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String query = GetQuery.getBloodRequestListQuery();
         ResultSet result = dbService.getResultSet(query);
         JSONObject jsonObject = BloodRequestJson.getBloodRequestJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void getUserProfile(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
 
         if (request.getParameter("mobileNumber") != null && request.getParameter("keyWord") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
@@ -88,10 +93,12 @@ public class DataService {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 String query = GetQuery.getUserProfileQuery(mobileNumber, hashKey);
                 //  Debug.debugLog("UserProfile: ", query);
+                dbService.databaseOpen();
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = UserProfileJson.getUserProfileJson(result);
                 jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
                 SendJsonData.sendJsonData(request, response, jsonObject);
+                dbService.databaseClose();
 
             } else {
                 JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
@@ -107,15 +114,17 @@ public class DataService {
     }
 
     public static void getUserDonationRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         JSONObject jsonObject = null;
-
         if (request.getParameter("mobileNumber") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber)) {
+                dbService.databaseOpen();
                 String query = GetQuery.getDonationRecordQuery(mobileNumber);
                 ResultSet result = dbService.getResultSet(query);
                 jsonObject = DonationRecordJson.getDonationRecordJson(result);
+                dbService.databaseClose();
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
@@ -128,6 +137,7 @@ public class DataService {
     }
 
     public static void getDonatorMobileNumber(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
@@ -148,12 +158,14 @@ public class DataService {
 
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
 
-                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
-                
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey,dbService);
+
                 if (validUser) {
+                    dbService.databaseOpen();
                     String query = GetQuery.findBestDonatorQuery(groupId, hospitalId);
                     ResultSet result = dbService.getResultSet(query);
                     jsonObject = DonatorMobileNumberJson.getDonatorMobileNumberJson(result);
+                    dbService.databaseClose();
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
                 }

@@ -45,7 +45,7 @@ public class DatabaseConnection {
     }
 
     public void setDatabaseInfo(String driverName, String databaseURL, String userName, String passWord) {
-        setDatabaseType(driverName);
+        setDriverName(driverName);
         setDatabaseURL(databaseURL);
         setUserName(userName);
         setPassWord(passWord);
@@ -65,7 +65,7 @@ public class DatabaseConnection {
         }
     }
 
-    private void setDatabaseType(String driverName) {
+    private void setDriverName(String driverName) {
         this.driverName = driverName;
        // System.out.println("Type:" + driverName);
     }

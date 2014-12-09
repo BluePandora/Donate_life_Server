@@ -24,16 +24,9 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class AdminService {
+public class AdminService extends DbUser {
 
-    private static DatabaseService dbService = new DatabaseService(
-            DbUser.DRIVER_NAME,
-            DbUser.DATABASEURL,
-            DbUser.USERNAME,
-            DbUser.PASSWORD
-    );
-
-    private static boolean isAccessKeyMatched(String hashKey) {
+    private static boolean isAccessKeyMatched(String hashKey, DatabaseService dbService) {
         System.out.println("HASH KEY: " + hashKey);
         String query = AdminQuery.getAccessKeyInfoQuery(hashKey);
         Debug.debugLog("KEY USER CHECK QUERY: " + query);
@@ -50,8 +43,11 @@ public class AdminService {
         }
         return adminFound;
     }
-    
+
     public static void getMobileNumberDetail(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
+
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
         if (request.getParameter("accessKey") != null && request.getParameter("mobileNumber") != null) {
@@ -59,7 +55,7 @@ public class AdminService {
             String mobileNumber = request.getParameter("mobileNumber");
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(accessKey)) {
                 String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey)) {
+                if (isAccessKeyMatched(hashKey, dbService)) {
                     String query = AdminQuery.getMobileDetailQuery(mobileNumber);
                     Debug.debugLog("MobileNumber Detail QUERY : ", query);
                     ResultSet result = dbService.getResultSet(query);
@@ -76,9 +72,12 @@ public class AdminService {
         }
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void getDonatorList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
         if (request.getParameter("accessKey") != null) {
@@ -88,7 +87,7 @@ public class AdminService {
 
             if (DataValidation.isValidKeyWord(accessKey)) {
                 String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey)) {
+                if (isAccessKeyMatched(hashKey,dbService)) {
                     String query = AdminQuery.getDonatorListQuery(groupName, distName);
                     Debug.debugLog("DonatorList QUERY : ", query);
                     ResultSet result = dbService.getResultSet(query);
@@ -105,9 +104,12 @@ public class AdminService {
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void getAdminList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
         if (request.getParameter("accessKey") != null) {
@@ -115,7 +117,7 @@ public class AdminService {
             if (DataValidation.isValidKeyWord(accessKey)) {
 
                 String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey)) {
+                if (isAccessKeyMatched(hashKey,dbService)) {
 
                     String query = AdminQuery.getAdminListQuery();
                     Debug.debugLog("AdminList  QUERY : ", query);
@@ -132,17 +134,19 @@ public class AdminService {
         }
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void getFeedBackList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
-
         if (request.getParameter("accessKey") != null) {
             String accessKey = request.getParameter("accessKey");
             if (DataValidation.isValidKeyWord(accessKey)) {
                 String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey)) {
+                if (isAccessKeyMatched(hashKey,dbService)) {
 
                     String query = AdminQuery.getFeedBackQuery();
                     Debug.debugLog("FeedBack QUERY : ", query);
@@ -160,5 +164,6 @@ public class AdminService {
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 }

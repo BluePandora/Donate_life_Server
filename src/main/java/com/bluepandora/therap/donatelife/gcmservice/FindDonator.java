@@ -25,7 +25,7 @@ public class FindDonator {
 
     private static DatabaseService dbService = new DatabaseService(
             DbUser.DRIVER_NAME,
-            DbUser.DATABASEURL,
+            DbUser.DATABASE_URL,
             DbUser.USERNAME,
             DbUser.PASSWORD
     );

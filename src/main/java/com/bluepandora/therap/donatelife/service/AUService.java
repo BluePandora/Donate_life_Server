@@ -28,17 +28,10 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class AUService {
+public class AUService extends DbUser {
 
-    private static DatabaseService dbService = new DatabaseService(
-            DbUser.DRIVER_NAME,
-            DbUser.DATABASEURL,
-            DbUser.USERNAME,
-            DbUser.PASSWORD
-    );
-
-    private static void addPersonName(String firstName, String lastName) {
-        boolean nameTaken = CheckService.isNameAlreadyAdded(firstName, lastName);
+    private static void addPersonName(String firstName, String lastName, DatabaseService dbService) {
+        boolean nameTaken = CheckService.isNameAlreadyAdded(firstName, lastName, dbService);
         if (nameTaken == false) {
             String query = GetQuery.addPersonNameQuery(firstName, lastName);
             dbService.queryExcute(query);
@@ -46,7 +39,8 @@ public class AUService {
     }
 
     public static void registerUser(HttpServletRequest request, HttpServletResponse response) throws JSONException {
-
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
         if (request.getParameter("firstName") != null
@@ -65,9 +59,9 @@ public class AUService {
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
-                boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber);
+                boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber, dbService);
                 if (mobileNumberTaken == false) {
-                    addPersonName(firstName, lastName);
+                    addPersonName(firstName, lastName, dbService);
                     String query = GetQuery.addPersonInfo(mobileNumber, groupId, distId, hashKey, firstName, lastName);
                     boolean done = dbService.queryExcute(query);
                     if (done) {
@@ -87,9 +81,13 @@ public class AUService {
         }
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void addFeedback(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
 
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
@@ -117,9 +115,12 @@ public class AUService {
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void updateGCMKey(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
 
         String requestName = request.getParameter("requsetName");
         JSONObject jsonObject = null;
@@ -143,9 +144,12 @@ public class AUService {
         }
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void userRegistrationCheck(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         JSONObject jsonObject;
         String requestName = request.getParameter("requestName");
 
@@ -153,7 +157,7 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber)) {
-                boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber);
+                boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber, dbService);
                 if (mobileNumberTaken) {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.CORRECT, "done", Enum.CORRECT);
                     Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG CHECKING SCCEUSS");
@@ -169,10 +173,12 @@ public class AUService {
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void addBloodRequest(HttpServletRequest request, HttpServletResponse response) throws JSONException, ParseException {
-
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject;
         Debug.debugLog("RequestName: ", requestName);
@@ -196,15 +202,15 @@ public class AUService {
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
-                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey, dbService);
                 if (validUser) {
-                    int userRequest = CheckService.requestTracker(mobileNumber, date);
+                    int userRequest = CheckService.requestTracker(mobileNumber, date, dbService);
                     Debug.debugLog("USER REQUEST: ", userRequest);
                     if (userRequest < Enum.MAX_REQUEST) {
-                        boolean validGroup = CheckService.isDuplicateBloodGroup(mobileNumber, groupId);
+                        boolean validGroup = CheckService.isDuplicateBloodGroup(mobileNumber, groupId, dbService);
                         Debug.debugLog("VALID GROUP: ", validGroup);
                         if (validGroup) {
-                            boolean validHospital = CheckService.isDuplicateHospital(mobileNumber, hospitalId);
+                            boolean validHospital = CheckService.isDuplicateHospital(mobileNumber, hospitalId, dbService);
                             if (validHospital) {
                                 Debug.debugLog("VALID HOSPITAL: ", validHospital);
                                 String query = GetQuery.addBloodRequestQuery(reqTime, mobileNumber, groupId, amount, hospitalId, emergency);
@@ -241,9 +247,12 @@ public class AUService {
         }
 
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void removePersonBloodRequestTracker(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         JSONObject jsonObject;
         String requestName = request.getParameter("requestName");
 
@@ -262,12 +271,14 @@ public class AUService {
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void addDonationRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
 
         String requestName = request.getParameter("requestName");
-
         JSONObject jsonObject = null;
 
         if (request.getParameter("mobileNumber") != null
@@ -297,9 +308,12 @@ public class AUService {
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void removeDonationRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
@@ -323,9 +337,12 @@ public class AUService {
 
         }
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void removeBloodRequest(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
@@ -349,9 +366,12 @@ public class AUService {
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void updateUserPersonalInfo(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
@@ -370,11 +390,11 @@ public class AUService {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
-             
+
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
-                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey);
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey, dbService);
                 if (validUser) {
-                    addPersonName(firstName, lastName);
+                    addPersonName(firstName, lastName, dbService);
                     String query = GetQuery.updatePersonInfoQuery(mobileNumber, hashKey, firstName, lastName, groupId, distId);
                     boolean done = dbService.queryExcute(query);
                     if (done) {
@@ -395,9 +415,12 @@ public class AUService {
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
     }
 
     public static void deleteBloodRequestBefore(int day) {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String query = GetQuery.deleteBloodRequestBeforeQuery(day);
         boolean done = dbService.queryExcute(query);
         if (done) {
@@ -405,9 +428,12 @@ public class AUService {
         } else {
             Debug.debugLog("BLOOD REQUEST DELETION OCCURS ERROR!");
         }
+        dbService.databaseClose();
     }
 
     public static void deleteRequestTracker(int day) {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
         String query = GetQuery.deleteBloodRequestTrackerQuery(day);
         boolean done = dbService.queryExcute(query);
         if (done) {
@@ -415,5 +441,6 @@ public class AUService {
         } else {
             Debug.debugLog("REQUEST TRACKER DELETION OCCURS ERROR!");
         }
+        dbService.databaseClose();
     }
 }

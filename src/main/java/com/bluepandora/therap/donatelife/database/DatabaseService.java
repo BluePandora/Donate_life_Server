@@ -30,17 +30,11 @@ public class DatabaseService {
         databaseConnection = new DatabaseConnection(username, password);
     }
 
-    public DatabaseService(String databaseType, String databaseURL, String userName, String passWord) {
-        databaseConnection = new DatabaseConnection(databaseType, databaseURL, userName, passWord);
+    public DatabaseService(String driverName, String databaseURL, String userName, String passWord) {
+        databaseConnection = new DatabaseConnection(driverName, databaseURL, userName, passWord);
     }
 
     public ResultSet getResultSet(String query) {
-
-        closeDatabaseConnection();
-        closeResultSet();
-        closeStatement();
-        connectToDatabase();
-
         try {
             statement = (Statement) connection.createStatement();
             resultSet = statement.executeQuery(query);
@@ -51,12 +45,6 @@ public class DatabaseService {
     }
 
     public boolean queryExcute(String query) {
-        
-        closeDatabaseConnection();
-        closeResultSet();
-        closeStatement();
-        connectToDatabase();
-        
         try {
             statement = (Statement) connection.createStatement();
             statement.execute(query);
@@ -67,16 +55,22 @@ public class DatabaseService {
         }
     }
 
-    private void connectToDatabase() {
+    public void databaseOpen() {
 
         connection = databaseConnection.getDatabaseConnection();
     }
-
-    private void closeDatabaseConnection() {
-
+    
+    public void databaseClose(){
+        closeConnection();
+        closeResultSet();
+        closeStatement();
+    }
+    
+    private void closeConnection() {
+        
         try {
             if (connection != null) {
-                System.out.println("Closing Previous Connection!");
+                System.out.println("Closing Connection!");
                 connection.close();
                 connection=null;
                 System.out.println("Database Connection Closed!");
@@ -90,10 +84,10 @@ public class DatabaseService {
     private void closeResultSet() {
         try {
             if (resultSet != null) {
-                System.out.println("Closing Previous ResultSet!");
+                System.out.println("Closing ResultSet!");
                 resultSet.close();
                 resultSet = null;
-                System.out.println("Previous ResultSet Closed!");
+                System.out.println("ResultSet Closed!");
             }
         } catch (SQLException error) {
             System.out.println("Problem occurs in closing resultset! " + error);
@@ -103,10 +97,10 @@ public class DatabaseService {
     private void closeStatement() {
         try {
             if (statement != null) {
-                System.out.println("Closing Previous Statement!");
+                System.out.println("Closing Statement!");
                 statement.close();
                 statement=null;
-                System.out.println("Previous Statement Closed!");
+                System.out.println("Statement Closed!");
             }
         } catch (SQLException error) {
             System.out.println("Problem occurs in closing Statement! " + error);
