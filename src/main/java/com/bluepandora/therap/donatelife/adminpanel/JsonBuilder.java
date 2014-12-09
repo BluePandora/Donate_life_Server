@@ -33,8 +33,10 @@ public class JsonBuilder {
     private static final String jsLastName = "lastName";
     private static final String jsGcmId = "gcmId";
     private static final String jsKeyWord = "keyWord";
-    private static final String jsUserName = "username";
-    private static final String jsComment = "comments";
+    private static final String jsIdUser = "idUser";
+    private static final String jsReqTime = "reqTime";
+    private static final String jsSubject = "subject";
+    private static final String jsComment = "comment";
 
     private static final String dbMobileNumber = "mobile_number";
     private static final String dbAdminName = "admin_name";
@@ -45,8 +47,10 @@ public class JsonBuilder {
     private static final String dbLastName = "last_name";
     private static final String dbGcmId = "gcm_id";
     private static final String dbKeyWord = "key_word";
-    private static final String dbUserName = "username";
-    private static final String dbComment = "comments";
+    private static final String dbIdUser = "id_user";
+    private static final String dbReqTime = "req_time";
+    private static final String dbSubject = "subject";
+    private static final String dbComment = "comment";
 
     public static JSONObject getMobileDetailJson(ResultSet result) throws JSONException {
         JSONArray jsonArray = new JSONArray();
@@ -103,7 +107,8 @@ public class JsonBuilder {
         try {
             while (result.next()) {
                 jsonObject = new JSONObject();
-                jsonObject.put(jsAdminName, result.getString(dbAdminName));
+                jsonObject.put(jsFirstName, result.getString(dbFirstName));
+                jsonObject.put(jsLastName, result.getString(dbLastName));
                 jsonObject.put(jsMobileNumber, result.getString(dbMobileNumber));
                 jsonObject.put(jsEmail, result.getString(dbEmail));
                 jsonArray.put(jsonObject);
@@ -118,17 +123,21 @@ public class JsonBuilder {
         }
         return jsonObject;
     }
-    
-     public static JSONObject getFeedBackJson(ResultSet result) throws JSONException {
+
+    public static JSONObject getFeedBackJson(ResultSet result) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject;
         try {
+
             while (result.next()) {
                 jsonObject = new JSONObject();
-                jsonObject.put(jsUserName, result.getString(dbUserName));
+                jsonObject.put(jsIdUser, result.getString(dbIdUser));
+                jsonObject.put(jsReqTime, result.getString(dbReqTime));
+                jsonObject.put(jsSubject, result.getString(dbSubject));
                 jsonObject.put(jsComment, result.getString(dbComment));
                 jsonArray.put(jsonObject);
             }
+
             jsonObject = new JSONObject();
             jsonObject.put(jsfeedBackList, jsonArray);
             jsonObject.put(jsDONE, 1);

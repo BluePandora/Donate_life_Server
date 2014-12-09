@@ -29,11 +29,16 @@ public class AdminQuery extends DbConstant{
         return "select * from " + T_FEEDBACK;
     }
     
+    public static String deleteFeedBackQuery(String idUser, String reqTime){
+        return "delete from "+T_FEEDBACK+" where id_user='"+idUser+"' and req_time='"+reqTime+"'";
+    }
+    
     public static String getAccessKeyInfoQuery(String accessKey){
-        return "select admin_name, mobile_number, email from "+T_ADMIN_PANEL + " where access_key='"+accessKey+"'";
+        return "select first_name, last_name, mobile_number, email from "+T_ADMIN_PANEL + " join "+T_PERSON+" using(person_id) where access_key='"+accessKey+"'";
     }
     
     public static String getAdminListQuery(){
-        return "select * from "+T_ADMIN_PANEL;
+        return "select * from "+T_ADMIN_PANEL + " join " + T_PERSON + " using(person_id)";
     }
+    
 }

@@ -117,6 +117,7 @@ public class AdminService extends DbUser {
             if (DataValidation.isValidKeyWord(accessKey)) {
 
                 String hashKey = DataValidation.encryptTheKeyWord(accessKey);
+                System.out.println("ACCESS KEY: "+hashKey);
                 if (isAccessKeyMatched(hashKey,dbService)) {
 
                     String query = AdminQuery.getAdminListQuery();
