@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bluepandora.therap.donatelife.jsonperser;
+package com.bluepandora.therap.donatelife.jsonbuilder;
 
 import com.bluepandora.therap.donatelife.debug.Debug;
 import java.sql.ResultSet;

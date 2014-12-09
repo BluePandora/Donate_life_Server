@@ -12,7 +12,7 @@ import com.bluepandora.therap.donatelife.database.DatabaseService;
 import com.bluepandora.therap.donatelife.database.GetQuery;
 import com.bluepandora.therap.donatelife.debug.Debug;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
-import com.bluepandora.therap.donatelife.jsonperser.RequestNameAdderJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.RequestNameAdderJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
 import static com.bluepandora.therap.donatelife.service.CheckService.isMobileNumberTaken;
 import com.bluepandora.therap.donatelife.validation.DataValidation;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bluepandora.therap.donatelife.jsonperser;
+package com.bluepandora.therap.donatelife.jsonbuilder;
 
 import com.bluepandora.therap.donatelife.debug.Debug;
 import java.sql.ResultSet;
@@ -16,35 +16,38 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class DistrictJson {
+public class BloodGroupJson {
 
-    private static final String DIST_ID = "distId";
-    private static final String DIST_NAME = "distName";
-    private static final String DISTRICT = "district";
+    private static final String BLOOD_GROUP = "bloodGroup";
+    private static final String GROUP_ID = "groupId";
+    private static final String GROUP_NAME = "groupName";
     private static final String DONE = "done";
 
-    public static JSONObject getDistrictJson(ResultSet result) throws JSONException {
-        JSONObject jsonObject;
+    public static JSONObject getJsonBloodGroup(ResultSet result) throws JSONException {
+
         JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject;
+
         try {
 
             while (result.next()) {
                 jsonObject = new JSONObject();
-                jsonObject.put(DIST_ID, result.getString("dist_id"));
-                jsonObject.put(DIST_NAME, result.getString("dist_name"));
+                jsonObject.put(GROUP_ID, result.getString("group_id"));
+                jsonObject.put(GROUP_NAME, result.getString("group_name"));
                 jsonArray.put(jsonObject);
             }
+            
             jsonObject = new JSONObject();
-            jsonObject.put(DISTRICT, jsonArray);
+            jsonObject.put(BLOOD_GROUP, jsonArray);
             jsonObject.put(DONE, 1);
-
+            
         } catch (SQLException error) {
-
-            Debug.debugLog("DISTRICT JSON ERROR: ", error);
+            Debug.debugLog("BLOOD_GROUP RESULT SET: ", error);
             jsonObject = new JSONObject();
             jsonObject.put(DONE, 0);
+            
         }
         return jsonObject;
-
     }
+
 }

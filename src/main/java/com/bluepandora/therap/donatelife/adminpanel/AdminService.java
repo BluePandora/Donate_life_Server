@@ -10,7 +10,7 @@ import com.bluepandora.therap.donatelife.constant.Enum;
 import com.bluepandora.therap.donatelife.database.DatabaseService;
 import com.bluepandora.therap.donatelife.debug.Debug;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
-import com.bluepandora.therap.donatelife.jsonperser.RequestNameAdderJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.RequestNameAdderJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
 import com.bluepandora.therap.donatelife.validation.DataValidation;
 import java.sql.ResultSet;

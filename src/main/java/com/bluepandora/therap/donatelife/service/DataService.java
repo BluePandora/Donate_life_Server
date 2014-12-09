@@ -10,16 +10,16 @@ import com.bluepandora.therap.donatelife.constant.Enum;
 import com.bluepandora.therap.donatelife.database.DatabaseService;
 import com.bluepandora.therap.donatelife.database.GetQuery;
 import com.bluepandora.therap.donatelife.debug.Debug;
-import com.bluepandora.therap.donatelife.jsonperser.BloodGroupJson;
-import com.bluepandora.therap.donatelife.jsonperser.BloodRequestJson;
-import com.bluepandora.therap.donatelife.jsonperser.DistrictJson;
-import com.bluepandora.therap.donatelife.jsonperser.DonationRecordJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.BloodGroupJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.BloodRequestJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.DistrictJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.DonationRecordJson;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
-import com.bluepandora.therap.donatelife.jsonperser.DonatorMobileNumberJson;
-import com.bluepandora.therap.donatelife.jsonperser.HospitalJson;
-import com.bluepandora.therap.donatelife.jsonperser.RequestNameAdderJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.DonatorMobileNumberJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.HospitalJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.RequestNameAdderJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
-import com.bluepandora.therap.donatelife.jsonperser.UserProfileJson;
+import com.bluepandora.therap.donatelife.jsonbuilder.UserProfileJson;
 import com.bluepandora.therap.donatelife.validation.DataValidation;
 
 import java.io.IOException;
@@ -157,19 +157,22 @@ public class DataService extends DbUser {
                     && DataValidation.isValidString(groupId)
                     && DataValidation.isValidString(hospitalId)) {
 
-                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                dbService.databaseOpen();
 
-                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey,dbService);
+                String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                boolean validUser = CheckService.isValidUser(mobileNumber, hashKey, dbService);
 
                 if (validUser) {
-                    dbService.databaseOpen();
+
                     String query = GetQuery.findBestDonatorQuery(groupId, hospitalId);
                     ResultSet result = dbService.getResultSet(query);
                     jsonObject = DonatorMobileNumberJson.getDonatorMobileNumberJson(result);
-                    dbService.databaseClose();
+
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
                 }
+
+                dbService.databaseClose();
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
@@ -180,7 +183,7 @@ public class DataService extends DbUser {
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
     }
-    
+
     public static void deleteBloodRequestBefore(int day, DatabaseService dbService) {
         String query = GetQuery.deleteBloodRequestBeforeQuery(day);
         boolean done = dbService.queryExcute(query);
