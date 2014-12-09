@@ -11,7 +11,12 @@ import com.bluepandora.therap.donatelife.debug.Debug;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
 import com.bluepandora.therap.donatelife.service.AUService;
+import com.bluepandora.therap.donatelife.service.BloodRequestService;
 import com.bluepandora.therap.donatelife.service.DataService;
+import com.bluepandora.therap.donatelife.service.DonationService;
+import com.bluepandora.therap.donatelife.service.FeedBackService;
+import com.bluepandora.therap.donatelife.service.GcmProfileService;
+import com.bluepandora.therap.donatelife.service.UserRegistrationService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -57,33 +62,31 @@ public class LifeService extends HttpServlet {
                     DataService.getDistrictList(request, response);
                 } else if (requestName.equals(Request.GET_BLOOD_REQUEST)) {
                     Debug.debugURL(request, response);
-                    AUService.deleteBloodRequestBefore(Enum.MAX_DAY);
                     DataService.getBloodRequestList(request, response);
                 } else if (requestName.equals(Request.USER_INFO)) {
                     DataService.getUserProfile(request, response);
                 } else if (requestName.equals(Request.GET_DONATION_RECORD)) {
                     DataService.getUserDonationRecord(request, response);
                 } else if (requestName.equals(Request.REGISTER)) {
-                    AUService.registerUser(request, response);
+                    UserRegistrationService.registerUser(request, response);
                 } else if (requestName.equals(Request.FEEDBACK)) {
-                    AUService.addFeedback(request, response);
+                    FeedBackService.addFeedback(request, response);
                 } else if (requestName.equals(Request.GCM_UPDATE)) {
-                    AUService.updateGCMKey(request, response);
+                    GcmProfileService.updateGCMKey(request, response);
                 } else if (requestName.equals(Request.IS_REGISTER)) {
-                    AUService.userRegistrationCheck(request, response);
+                    UserRegistrationService.userRegistrationCheck(request, response);
                 } else if (requestName.equals(Request.ADD_BLOOD_REQUEST)) {
-                    AUService.deleteRequestTracker(Enum.MAX_DAY);
-                    AUService.addBloodRequest(request, response);
+                    BloodRequestService.addBloodRequest(request, response);
                 } else if (requestName.equals(Request.REMOVE_TRACKER)) {
-                    AUService.removePersonBloodRequestTracker(request, response);
+                    BloodRequestService.removePersonBloodRequestTracker(request, response);
                 } else if (requestName.equals(Request.ADD_DONATION_RECORD)) {
-                    AUService.addDonationRecord(request, response);
+                    DonationService.addDonationRecord(request, response);
                 } else if (requestName.equals(Request.REMOVE_DONATION_RECORD)) {
-                    AUService.removeDonationRecord(request, response);
+                    DonationService.removeDonationRecord(request, response);
                 } else if (requestName.equals(Request.DELETE_BLOOD_REQUET_IN_KEY)) {
-                    AUService.removeBloodRequest(request, response);
+                    BloodRequestService.removeBloodRequest(request, response);
                 } else if (requestName.equals(Request.UPDATE_USER_INFO)) {
-                    AUService.updateUserPersonalInfo(request, response);
+                    UserRegistrationService.updateUserPersonalInfo(request, response);
                 } else if (requestName.equals(Request.FIND_DONATOR_MOBILE_NUMBER)) {
                     DataService.getDonatorMobileNumber(request, response);
                 } else {

@@ -73,6 +73,7 @@ public class DataService extends DbUser {
     public static void getBloodRequestList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         dbService.databaseOpen();
+        deleteBloodRequestBefore(Enum.MAX_DAY, dbService);
         String query = GetQuery.getBloodRequestListQuery();
         ResultSet result = dbService.getResultSet(query);
         JSONObject jsonObject = BloodRequestJson.getBloodRequestJson(result);
@@ -178,6 +179,16 @@ public class DataService extends DbUser {
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
+    }
+    
+    public static void deleteBloodRequestBefore(int day, DatabaseService dbService) {
+        String query = GetQuery.deleteBloodRequestBeforeQuery(day);
+        boolean done = dbService.queryExcute(query);
+        if (done) {
+            Debug.debugLog("BLOOD REQUEST BEFORE " + day + " DAYS IS DELETED");
+        } else {
+            Debug.debugLog("BLOOD REQUEST DELETION OCCURS ERROR!");
+        }
     }
 
     public static void unknownHit(HttpServletRequest request, HttpServletResponse response) throws JSONException {

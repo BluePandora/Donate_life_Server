@@ -18,7 +18,6 @@ import com.bluepandora.therap.donatelife.jsonperser.RequestNameAdderJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
 import static com.bluepandora.therap.donatelife.service.CheckService.isMobileNumberTaken;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;

@@ -109,13 +109,10 @@ public class CheckService extends DbUser {
     }
 
     public static boolean isNameAlreadyAdded(String firstName, String lastName, DatabaseService dbService) {
-        
+
         String query = GetQuery.getPersonNameIdQuery(firstName, lastName);
-        
         ResultSet result = dbService.getResultSet(query);
-        
         boolean nameTaken = false;
-        
         try {
             while (result.next()) {
                 nameTaken = true;
@@ -123,7 +120,7 @@ public class CheckService extends DbUser {
         } catch (SQLException error) {
             Logger.getLogger(CheckService.class.getName()).log(Level.SEVERE, null, error);
         }
-        
+
         return nameTaken;
     }
 }

@@ -21,9 +21,7 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class FindDonator{
-
-
+public class FindDonator {
 
     /**
      * This method for finding GCM-ID from the Donate Life's database matched
@@ -32,6 +30,9 @@ public class FindDonator{
      * @param groupId
      * @param hospitalId
      */
+    
+    private static final int VALID_GCM_SIZE_GREATER=8;
+    
     public static List findDonator(String groupId, String hospitalId, String mobileNumber, DatabaseService dbService) {
 
         String query = GetQuery.getGcmIdOfDonatorQuery(groupId, hospitalId, mobileNumber);
@@ -44,7 +45,11 @@ public class FindDonator{
             while (result.next()) {
                 gcmId = result.getString("gcm_id");
                 mobileNumber = result.getString("mobile_number");
-                donatorList.add(new Donator(mobileNumber, gcmId));
+                
+                if (gcmId.length() > VALID_GCM_SIZE_GREATER) {
+                    donatorList.add(new Donator(mobileNumber, gcmId));
+                }
+
             }
         } catch (SQLException error) {
             Debug.debugLog("FINDING DONATOR SQL EXCEPTION!");
@@ -73,7 +78,7 @@ public class FindDonator{
                 String mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
                 Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
-                if (gcmId.length() > 0) {
+                if (gcmId.length() > VALID_GCM_SIZE_GREATER) {
                     donatorList.add(gcmId);
                 }
             }
@@ -95,13 +100,14 @@ public class FindDonator{
         ResultSet result = dbService.getResultSet(query);
         List donatorList = new ArrayList<String>();
         Debug.debugLog("REQUESTER GCM ID FINDING");
+        
         try {
             while (result.next()) {
                 mobileNumber = result.getString("mobile_number");
                 String gcmId = result.getString("gcm_id");
                 Debug.debugLog("Mobile: ", mobileNumber, "GCM Id: ", gcmId);
-                int validGcmSize = 5;
-                if (gcmId.length() > validGcmSize) {
+                
+                if (gcmId.length() > VALID_GCM_SIZE_GREATER) {
                     donatorList.add(gcmId);
                 }
             }
@@ -110,6 +116,5 @@ public class FindDonator{
         }
         return donatorList;
     }
-
 
 }
