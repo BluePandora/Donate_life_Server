@@ -127,6 +127,11 @@ public class AUService extends DbUser {
         if (request.getParameter("mobileNumber") != null && request.getParameter("gcmId") != null) {
             String mobileNumber = request.getParameter("mobileNumber");
             String gcmId = request.getParameter("gcmId");
+
+            if (gcmId == null || gcmId.equals("NULL") || gcmId.equals("null")) {
+                gcmId = "";
+            }
+
             if (DataValidation.isValidMobileNumber(mobileNumber)) {
                 String query = GetQuery.updateGCMIdQuery(mobileNumber, gcmId);
                 boolean done = dbService.queryExcute(query);
