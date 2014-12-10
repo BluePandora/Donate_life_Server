@@ -56,24 +56,27 @@ public class DatabaseService {
     }
 
     public void databaseOpen() {
-
+        System.out.println("Database Opening");
         connection = databaseConnection.getDatabaseConnection();
+        System.out.println("Database Opened");
     }
     
     public void databaseClose(){
+        System.out.println("Closing Database");
         closeConnection();
         closeResultSet();
         closeStatement();
+        System.out.println("Database Closed");
     }
     
     private void closeConnection() {
         
         try {
             if (connection != null) {
-                System.out.println("Closing Connection!");
+//                System.out.println("Closing Connection!");
                 connection.close();
                 connection=null;
-                System.out.println("Database Connection Closed!");
+//                System.out.println("Connection Closed!");
             }
             
         } catch (SQLException error) {
@@ -84,10 +87,10 @@ public class DatabaseService {
     private void closeResultSet() {
         try {
             if (resultSet != null) {
-                System.out.println("Closing ResultSet!");
+//                System.out.println("Closing ResultSet!");
                 resultSet.close();
                 resultSet = null;
-                System.out.println("ResultSet Closed!");
+//                System.out.println("ResultSet Closed!");
             }
         } catch (SQLException error) {
             System.out.println("Problem occurs in closing resultset! " + error);
@@ -97,10 +100,10 @@ public class DatabaseService {
     private void closeStatement() {
         try {
             if (statement != null) {
-                System.out.println("Closing Statement!");
+//                System.out.println("Closing Statement!");
                 statement.close();
                 statement=null;
-                System.out.println("Statement Closed!");
+//                System.out.println("Statement Closed!");
             }
         } catch (SQLException error) {
             System.out.println("Problem occurs in closing Statement! " + error);
