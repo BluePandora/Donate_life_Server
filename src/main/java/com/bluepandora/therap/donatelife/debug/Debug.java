@@ -30,16 +30,21 @@ public class Debug {
         Enumeration<String> parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
             String paramName = parameterNames.nextElement();
-            System.out.print("\t"+paramName + ": ");
-            if (!paramName.equals("keyWord")) {
-                String[] paramValues = request.getParameterValues(paramName);
-                for (int index = 0; index < paramValues.length; index++) {
-                    String paramValue = paramValues[index];
-                    System.out.print(paramValue + " ");
-                }
-            }
-            System.out.println("");
             parameterFound = true;
+            System.out.print("\t" + paramName + ": ");
+
+            if (paramName.equals("keyWord") || paramName.equals("accessKey")) {
+                continue;
+            }
+
+            String[] paramValues = request.getParameterValues(paramName);
+            for (int index = 0; index < paramValues.length; index++) {
+                String paramValue = paramValues[index];
+                System.out.print(paramValue + " ");
+            }
+
+            System.out.println("");
+
         }
 
         if (parameterFound == false) {
