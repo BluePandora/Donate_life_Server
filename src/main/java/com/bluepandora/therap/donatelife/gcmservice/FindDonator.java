@@ -62,7 +62,7 @@ public class FindDonator {
      * @param groupId
      * @param hospitalId
      * @param mobileNumber
-     * @return This function will return the List of GCM ID without this
+     * @return This function will return the List of GCM ID without Requester 
      * mobileNumber's GCM ID;
      */
     public static List findDonatorGCMId(String groupId, String hospitalId, DatabaseService dbService) {

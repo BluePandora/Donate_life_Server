@@ -30,6 +30,18 @@ public class GetQuery extends DbConstant {
         return "select * from " + T_BLOOD_REQUEST + " order by req_time desc";
     }
 
+    public static String getBloodRequestListQuery(String distId) {
+        return "select * from " + T_BLOOD_REQUEST + " join " + T_HOSPITAL + " using(hospital_id) where dist_id=" + distId + " order by req_time desc";
+    }
+
+    public static String getBloodRequestListQuery(String distId, String groupId) {
+        return "select * from " + T_BLOOD_REQUEST + " join " + T_HOSPITAL + " using(hospital_id) where dist_id=" + distId + " and group_id=" + groupId + " order by req_time desc";
+    }
+    
+    public static String getBloodRequestListByGroupIdQuery(String groupId) {
+        return "select * from " + T_BLOOD_REQUEST + "  where group_id=" + groupId + " order by req_time desc";
+    }
+
     public static String getBloodGroupNameQuery(String groupId) {
         return "select * from " + T_BLOOD_GROUP + " where group_id=" + groupId;
     }
@@ -141,8 +153,8 @@ public class GetQuery extends DbConstant {
     }
 
     public static String findBestDonatorQuery(String groupId, String hospitalId) {
-        return "select * from "+T_PERSON_INFO+" where mobile_number not in ("
-                + "select mobile_number from "+T_DONATION_RECORD+" where donation_date > (now()-interval 3 month) "
-                + "group by mobile_number) and group_id="+groupId+" and dist_id=(select dist_id from "+T_HOSPITAL+" where hospital_id="+hospitalId+")";
+        return "select * from " + T_PERSON_INFO + " where mobile_number not in ("
+                + "select mobile_number from " + T_DONATION_RECORD + " where donation_date > (now()-interval 3 month) "
+                + "group by mobile_number) and group_id=" + groupId + " and dist_id=(select dist_id from " + T_HOSPITAL + " where hospital_id=" + hospitalId + ")";
     }
 }

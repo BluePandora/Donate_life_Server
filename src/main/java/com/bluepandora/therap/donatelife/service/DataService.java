@@ -72,11 +72,33 @@ public class DataService extends DbUser {
 
     public static void getBloodRequestList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        JSONObject jsonObject = null;
         dbService.databaseOpen();
+
         deleteBloodRequestBefore(Enum.MAX_DAY, dbService);
-        String query = GetQuery.getBloodRequestListQuery();
-        ResultSet result = dbService.getResultSet(query);
-        JSONObject jsonObject = BloodRequestJson.getBloodRequestJson(result);
+
+        if (request.getParameter("distId") != null && request.getParameter("groupId") != null) {
+            String distId = request.getParameter("distId");
+            String groupId = request.getParameter("groupId");
+            String query = GetQuery.getBloodRequestListQuery(distId, groupId);
+            ResultSet result = dbService.getResultSet(query);
+            jsonObject = BloodRequestJson.getBloodRequestJson(result);
+        } else if (request.getParameter("distId") != null) {
+            String distId = request.getParameter("distId");
+            String query = GetQuery.getBloodRequestListQuery(distId);
+            ResultSet result = dbService.getResultSet(query);
+            jsonObject = BloodRequestJson.getBloodRequestJson(result);
+        } else if (request.getParameter("groupId") != null) {
+            String groupId = request.getParameter("groupId");
+            String query = GetQuery.getBloodRequestListByGroupIdQuery(groupId);
+            ResultSet result = dbService.getResultSet(query);
+            jsonObject = BloodRequestJson.getBloodRequestJson(result);
+        } else {
+            String query = GetQuery.getBloodRequestListQuery();
+            ResultSet result = dbService.getResultSet(query);
+            jsonObject = BloodRequestJson.getBloodRequestJson(result);
+        }
+
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, request.getParameter("requestName"));
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
@@ -93,7 +115,7 @@ public class DataService extends DbUser {
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 String query = GetQuery.getUserProfileQuery(mobileNumber, hashKey);
-                //  Debug.debugLog("UserProfile: ", query);
+
                 dbService.databaseOpen();
                 ResultSet result = dbService.getResultSet(query);
                 JSONObject jsonObject = UserProfileJson.getUserProfileJson(result);

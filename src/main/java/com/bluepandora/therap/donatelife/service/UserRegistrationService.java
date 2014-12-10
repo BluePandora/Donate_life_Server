@@ -86,7 +86,7 @@ public class UserRegistrationService extends DbUser{
                 boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber, dbService);
                 if (mobileNumberTaken) {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.CORRECT, "done", Enum.CORRECT);
-                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG CHECKING SCCEUSS");
+                    Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REG CHECKING SUCCESS");
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.ERROR, "done", Enum.CORRECT);
                 }
