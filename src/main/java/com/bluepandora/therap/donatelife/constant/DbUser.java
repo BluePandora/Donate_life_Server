@@ -18,7 +18,7 @@ public class DbUser {
 //    public static final String PASSWORD = "coderbd";
 //    public static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
 //    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/life?useUnicode=true&characterEncoding=UTF-8";
-  
+//  
     
     /**
      * This is for openshift access

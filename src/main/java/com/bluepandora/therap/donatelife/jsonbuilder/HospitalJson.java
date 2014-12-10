@@ -22,6 +22,7 @@ public class HospitalJson {
     private static final String DIST_ID = "distId";
     private static final String HOSP_ID = "hospitalId";
     private static final String HOSP_NAME = "hospitalName";
+    private static final String HOSP_BNAME = "hospitalBName";
     private static final String DONE = "done";
 
     public static JSONObject getHospitalJson(ResultSet result) throws JSONException {
@@ -34,6 +35,7 @@ public class HospitalJson {
                 jsonObject.put(DIST_ID, result.getString("dist_id"));
                 jsonObject.put(HOSP_ID, result.getString("hospital_id"));
                 jsonObject.put(HOSP_NAME, result.getString("hospital_name"));
+                jsonObject.put(HOSP_BNAME, result.getString("hospital_bname"));
                 jsonArray.put(jsonObject);
             }
             jsonObject = new JSONObject();

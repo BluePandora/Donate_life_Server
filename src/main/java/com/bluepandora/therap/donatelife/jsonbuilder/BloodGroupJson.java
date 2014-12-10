@@ -21,6 +21,7 @@ public class BloodGroupJson {
     private static final String BLOOD_GROUP = "bloodGroup";
     private static final String GROUP_ID = "groupId";
     private static final String GROUP_NAME = "groupName";
+    private static final String GROUP_BNAME = "groupBName";
     private static final String DONE = "done";
 
     public static JSONObject getJsonBloodGroup(ResultSet result) throws JSONException {
@@ -34,6 +35,7 @@ public class BloodGroupJson {
                 jsonObject = new JSONObject();
                 jsonObject.put(GROUP_ID, result.getString("group_id"));
                 jsonObject.put(GROUP_NAME, result.getString("group_name"));
+                jsonObject.put(GROUP_BNAME, result.getString("group_bname"));
                 jsonArray.put(jsonObject);
             }
             

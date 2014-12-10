@@ -20,6 +20,7 @@ public class DistrictJson {
 
     private static final String DIST_ID = "distId";
     private static final String DIST_NAME = "distName";
+    private static final String DIST_BNAME = "distBName";
     private static final String DISTRICT = "district";
     private static final String DONE = "done";
 
@@ -32,6 +33,7 @@ public class DistrictJson {
                 jsonObject = new JSONObject();
                 jsonObject.put(DIST_ID, result.getString("dist_id"));
                 jsonObject.put(DIST_NAME, result.getString("dist_name"));
+                jsonObject.put(DIST_BNAME, result.getString("dist_bname"));
                 jsonArray.put(jsonObject);
             }
             jsonObject = new JSONObject();

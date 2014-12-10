@@ -10,7 +10,6 @@ import com.bluepandora.therap.donatelife.constant.Enum;
 import com.bluepandora.therap.donatelife.debug.Debug;
 import com.bluepandora.therap.donatelife.debug.LogMessageJson;
 import com.bluepandora.therap.donatelife.jsonsender.SendJsonData;
-import com.bluepandora.therap.donatelife.service.AUService;
 import com.bluepandora.therap.donatelife.service.BloodRequestService;
 import com.bluepandora.therap.donatelife.service.DataService;
 import com.bluepandora.therap.donatelife.service.DonationService;
