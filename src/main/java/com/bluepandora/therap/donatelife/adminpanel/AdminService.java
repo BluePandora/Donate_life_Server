@@ -26,50 +26,38 @@ import org.json.JSONObject;
  */
 public class AdminService extends DbUser {
 
-    private static boolean isAccessKeyMatched(String hashKey, DatabaseService dbService) {
-        System.out.println("HASH KEY: " + hashKey);
-        String query = AdminQuery.getAccessKeyInfoQuery(hashKey);
-        Debug.debugLog("KEY USER CHECK QUERY: " + query);
-        ResultSet result = dbService.getResultSet(query);
-        boolean adminFound = false;
-        try {
-            while (result.next()) {
-                adminFound = true;
-            }
-        } catch (SQLException error) {
-            adminFound = false;
-        } catch (Exception error) {
-            adminFound = false;
-        }
-        return adminFound;
-    }
-
-    public static void getMobileNumberDetail(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+    public static void adminLogin(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         dbService.databaseOpen();
-
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
-        if (request.getParameter("accessKey") != null && request.getParameter("mobileNumber") != null) {
+
+        if (request.getParameter("username") != null && request.getParameter("accessKey") != null) {
+            String username = request.getParameter("username");
             String accessKey = request.getParameter("accessKey");
-            String mobileNumber = request.getParameter("mobileNumber");
-            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(accessKey)) {
-                String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey, dbService)) {
-                    String query = AdminQuery.getMobileDetailQuery(mobileNumber);
-                    Debug.debugLog("MobileNumber Detail QUERY : ", query);
-                    ResultSet result = dbService.getResultSet(query);
-                    jsonObject = JsonBuilder.getMobileDetailJson(result);
-                } else {
-                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
-                }
-            } else {
-                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-            }
+            username = username.replace(" ", "");
+            accessKey = accessKey.replace(" ", "");
+            String hashKey = DataValidation.encryptTheKeyWord(accessKey);
+            String query = AdminQuery.adminLoginQuery(username, hashKey);
+            ResultSet result = dbService.getResultSet(query);
+            jsonObject = JsonBuilder.adminProfile(result);
         } else {
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-
         }
+        jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
+        SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
+    }
+
+    public static void getHospitalList(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
+        String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
+        String query = AdminQuery.getHospitalListQuery();
+        Debug.debugLog("HospitalList QUERY : ", query);
+        ResultSet result = dbService.getResultSet(query);
+        jsonObject = JsonBuilder.getHospitalListJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
@@ -80,28 +68,10 @@ public class AdminService extends DbUser {
         dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
-        if (request.getParameter("accessKey") != null) {
-            String accessKey = request.getParameter("accessKey");
-            String groupName = request.getParameter("groupName");
-            String distName = request.getParameter("distName");
-
-            if (DataValidation.isValidKeyWord(accessKey)) {
-                String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey,dbService)) {
-                    String query = AdminQuery.getDonatorListQuery(groupName, distName);
-                    Debug.debugLog("DonatorList QUERY : ", query);
-                    ResultSet result = dbService.getResultSet(query);
-                    jsonObject = JsonBuilder.getDonatorListJson(result);
-                } else {
-                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ACCESS_KEY_NOT_MATCHED);
-                }
-            } else {
-                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-            }
-        } else {
-            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-        }
-
+        String query = AdminQuery.getDonatorListQuery();
+        Debug.debugLog("DonatorList QUERY : ", query);
+        ResultSet result = dbService.getResultSet(query);
+        jsonObject = JsonBuilder.getDonatorListJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
@@ -112,27 +82,10 @@ public class AdminService extends DbUser {
         dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
-        if (request.getParameter("accessKey") != null) {
-            String accessKey = request.getParameter("accessKey");
-            if (DataValidation.isValidKeyWord(accessKey)) {
-
-                String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                System.out.println("ACCESS KEY: "+hashKey);
-                if (isAccessKeyMatched(hashKey,dbService)) {
-
-                    String query = AdminQuery.getAdminListQuery();
-                    Debug.debugLog("AdminList  QUERY : ", query);
-                    ResultSet result = dbService.getResultSet(query);
-                    jsonObject = JsonBuilder.getAdminListJson(result);
-                } else {
-                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ACCESS_KEY_NOT_MATCHED);
-                }
-            } else {
-                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-            }
-        } else {
-            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-        }
+        String query = AdminQuery.getAdminListQuery();
+        Debug.debugLog("AdminList  QUERY : ", query);
+        ResultSet result = dbService.getResultSet(query);
+        jsonObject = JsonBuilder.getAdminListJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
@@ -143,26 +96,10 @@ public class AdminService extends DbUser {
         dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
-        if (request.getParameter("accessKey") != null) {
-            String accessKey = request.getParameter("accessKey");
-            if (DataValidation.isValidKeyWord(accessKey)) {
-                String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-                if (isAccessKeyMatched(hashKey,dbService)) {
-
-                    String query = AdminQuery.getFeedBackQuery();
-                    Debug.debugLog("FeedBack QUERY : ", query);
-                    ResultSet result = dbService.getResultSet(query);
-                    jsonObject = JsonBuilder.getFeedBackJson(result);
-                } else {
-                    jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ACCESS_KEY_NOT_MATCHED);
-                }
-            } else {
-                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
-            }
-        } else {
-            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
-        }
-
+        String query = AdminQuery.getFeedBackQuery();
+        Debug.debugLog("FeedBack QUERY : ", query);
+        ResultSet result = dbService.getResultSet(query);
+        jsonObject = JsonBuilder.getFeedBackJson(result);
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();

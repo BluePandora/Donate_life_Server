@@ -49,13 +49,16 @@ public class AdminServlet extends HttpServlet {
 
                 if (requestName.equals(AdminRequest.requestDonatorList)) {
                     AdminService.getDonatorList(request, response);
-                } else if (requestName.equals(AdminRequest.requestMobileNumberDetail)) {
-                    AdminService.getMobileNumberDetail(request, response);
                 } else if (requestName.equals(AdminRequest.requestAdminList)) {
                     AdminService.getAdminList(request, response);
-                } else if (requestName.equals(AdminRequest.requestFeedBack)) {
+                } else if (requestName.equals(AdminRequest.requestFeedBackList)) {
                     AdminService.getFeedBackList(request, response);
-                } else {
+                }else if(requestName.equals(AdminRequest.requestHospitalList)){
+                  AdminService.getHospitalList(request,response);
+                }else if(requestName.equals(AdminRequest.requestAdminLogin)){
+                    AdminService.adminLogin(request, response);
+                }
+                else {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "UNKNOWN SERVICE NAME!");
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 }

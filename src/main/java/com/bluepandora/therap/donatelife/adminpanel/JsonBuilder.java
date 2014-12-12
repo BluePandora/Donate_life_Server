@@ -37,6 +37,9 @@ public class JsonBuilder {
     private static final String jsReqTime = "reqTime";
     private static final String jsSubject = "subject";
     private static final String jsComment = "comment";
+    private static final String jsHospitalId = "hospitalId";
+    private static final String jsHospitalName = "hospitalName";
+    private static final String jsHospitalBName = "hospitalBName";
 
     private static final String dbMobileNumber = "mobile_number";
     private static final String dbAdminName = "admin_name";
@@ -51,30 +54,9 @@ public class JsonBuilder {
     private static final String dbReqTime = "req_time";
     private static final String dbSubject = "subject";
     private static final String dbComment = "comment";
-
-    public static JSONObject getMobileDetailJson(ResultSet result) throws JSONException {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject;
-        try {
-            while (result.next()) {
-                jsonObject = new JSONObject();
-                jsonObject.put(jsFirstName, result.getString(dbFirstName));
-                jsonObject.put(jsLastName, result.getString(dbLastName));
-                jsonObject.put(jsGroupName, result.getString(dbGroupName));
-                jsonObject.put(jsDistName, result.getString(dbDistName));
-                jsonObject.put(jsGcmId, result.getString(dbGcmId));
-                jsonArray.put(jsonObject);
-            }
-            jsonObject = new JSONObject();
-            jsonObject.put(jsMobileDetailList, jsonArray);
-            jsonObject.put(jsDONE, 1);
-        } catch (SQLException error) {
-            Debug.debugLog("MOBILE DETAILS RESULT SET: ", error);
-            jsonObject = new JSONObject();
-            jsonObject.put(jsDONE, 0);
-        }
-        return jsonObject;
-    }
+    private static final String dbHospitalId = "hospital_id";
+    private static final String dbHospitalName = "hospital_name";
+    private static final String dbHospitalBName = "hospital_bname";
 
     public static JSONObject getDonatorListJson(ResultSet result) throws JSONException {
         JSONArray jsonArray = new JSONArray();
@@ -143,6 +125,66 @@ public class JsonBuilder {
             jsonObject.put(jsDONE, 1);
         } catch (SQLException error) {
             Debug.debugLog("FEEDBACK RESULT SET: ", error);
+            jsonObject = new JSONObject();
+            jsonObject.put(jsDONE, 0);
+        }
+        return jsonObject;
+    }
+
+    public static JSONObject getHospitalListJson(ResultSet result) throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = null;
+        try {
+            while (result.next()) {
+                jsonObject = new JSONObject();
+                jsonObject.put(jsHospitalId, result.getString(dbHospitalId));
+                jsonObject.put(jsDistName, result.getString(dbDistName));
+                jsonObject.put(jsHospitalName, result.getString(dbHospitalName));
+                jsonObject.put(jsHospitalBName, result.getString(dbHospitalBName));
+                jsonArray.put(jsonObject);
+            }
+
+            if (jsonArray.length() != 0) {
+                jsonObject = new JSONObject();
+                jsonObject.put("hospitalList", jsonArray);
+                jsonObject.put(jsDONE, 1);
+            } else {
+                jsonObject = new JSONObject();
+                jsonObject.put("message", "NO HOSPITAL LIST FOUND!");
+                jsonObject.put(jsDONE, 0);
+            }
+        } catch (SQLException error) {
+            Debug.debugLog("Hospital List: ", error);
+            jsonObject = new JSONObject();
+            jsonObject.put(jsDONE, 0);
+        }
+        return jsonObject;
+    }
+    
+    public static JSONObject adminProfile(ResultSet result) throws JSONException{
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = null;
+        try {
+            while (result.next()) {
+                jsonObject = new JSONObject();
+                jsonObject.put(jsFirstName, result.getString(dbFirstName));
+                jsonObject.put(jsLastName, result.getString(dbLastName));
+                jsonObject.put(jsEmail, result.getString(dbEmail));
+                jsonObject.put(jsMobileNumber, result.getString(dbMobileNumber));
+                jsonArray.put(jsonObject);
+            }
+
+            if (jsonArray.length() != 0) {
+                jsonObject = new JSONObject();
+                jsonObject.put("admin", jsonArray);
+                jsonObject.put(jsDONE, 1);
+            } else {
+                jsonObject = new JSONObject();
+                jsonObject.put("message", "NO VALID ADMIN FOUND!");
+                jsonObject.put(jsDONE, 0);
+            }
+        } catch (SQLException error) {
+            Debug.debugLog("Admin SQL : ", error);
             jsonObject = new JSONObject();
             jsonObject.put(jsDONE, 0);
         }

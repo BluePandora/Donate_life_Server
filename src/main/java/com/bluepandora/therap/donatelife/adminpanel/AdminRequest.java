@@ -11,8 +11,12 @@ package com.bluepandora.therap.donatelife.adminpanel;
  * @author Biswajit Debnath
  */
 public class AdminRequest {
+    
     public static final String requestDonatorList="getDonatorList";
-    public static final String requestMobileNumberDetail="getMobileNumberDetail";
-    public static final String requestFeedBack="getFeedBack";
+    public static final String requestFeedBackList="getFeedBackList";
     public static final String requestAdminList="getAdminList";
+    public static final String requestAppUserList="getAppUserList";
+    public static final String requestHospitalList="getHospitalList";
+    public static final String requestAdminLogin="adminLogin";
+    
 }
