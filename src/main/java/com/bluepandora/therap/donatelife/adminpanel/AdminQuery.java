@@ -41,5 +41,17 @@ public class AdminQuery extends DbConstant {
     public static String getHospitalListQuery() {
         return "select hospital_id, dist_name, hospital_name, hospital_bname from " + T_HOSPITAL + " join " + T_DISTRICT + " using(dist_id) order by hospital_id desc";
     }
+    
+    public static String addHospitalQuery(String distId, String hospitalName, String hospitalBName){
+        return "insert into "+T_HOSPITAL+" (dist_id, hospital_name, hospital_bname) values("+distId+",'"+hospitalName+"','"+hospitalBName+"')";
+    }
+    
+    public static String removeHospitalQuery(String hospitalId){
+        return "delete from "+T_HOSPITAL+" where hospital_id="+hospitalId;
+    }
+    
+    public static String removeFeedBackQuery(String idUser, String reqTime){
+        return "delete from "+T_FEEDBACK+" where id_user='"+idUser+"' and req_time='"+reqTime+"'";
+    }
 
 }

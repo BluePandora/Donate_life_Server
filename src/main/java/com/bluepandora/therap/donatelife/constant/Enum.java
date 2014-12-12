@@ -37,5 +37,9 @@ public class Enum {
     public static final String MESSAGE_ACCESS_KEY_NOT_MATCHED="SORRY, ACCESS KEY NOT MATCHED!";
     public static final String MESSAGE_UNKNOWN_HIT="UNKNOWN REQUEST TO SERVER!";
     public static final String MESSAGE_NO_SUITABLE_DONATOR_FOUND="PERFECT DONATOR NOT FOUND!";
+    public static final String MESSAGE_HOSPITAL_ADDED="NEW HOSPIAL ADDED SUCCESSFULLY!";
+    public static final String MESSAGE_HOSPITAL_REMOVED="HOSPIAL SUCCESSFULLY REMOVED !";
+    public static final String MESSAGE_FEEDBACK_REMOVED="FEEDBACK SUCCESSFULLY REMOVED !";
+    
 
 }

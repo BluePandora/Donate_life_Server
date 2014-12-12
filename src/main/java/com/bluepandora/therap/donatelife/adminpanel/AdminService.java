@@ -104,4 +104,72 @@ public class AdminService extends DbUser {
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
     }
+
+    public static void addHospital(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
+        String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
+        if (request.getParameter("distId") != null && request.getParameter("hospitalName") != null && request.getParameter("hospitalBName") != null) {
+            String distId = request.getParameter("distId");
+            String hospitalName = request.getParameter("hospitalName");
+            String hospitalBName = request.getParameter("hospitalBName");
+
+            String query = AdminQuery.addHospitalQuery(distId, hospitalName, hospitalBName);
+            boolean done = dbService.queryExcute(query);
+            if (done) {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_HOSPITAL_ADDED, requestName);
+            } else {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
+            }
+        } else {
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
+        }
+
+        SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
+    }
+
+    public static void removeHospital(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
+        String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
+        if (request.getParameter("hospitalId") != null) {
+            String hospitalId = request.getParameter("hospitalId");
+            String query = AdminQuery.removeHospitalQuery(hospitalId);
+            boolean done = dbService.queryExcute(query);
+            if (done) {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_HOSPITAL_REMOVED, requestName);
+            } else {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
+            }
+        } else {
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
+        }
+        SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
+    }
+    
+    public static void removeFeedBack(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+        DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
+        dbService.databaseOpen();
+        String requestName = request.getParameter("requestName");
+        JSONObject jsonObject = null;
+        if (request.getParameter("idUser") != null && request.getParameter("reqTime")!=null) {
+            String idUser = request.getParameter("idUser");
+            String reqTime = request.getParameter("reqTime");
+            String query = AdminQuery.removeFeedBackQuery(idUser, reqTime);
+            boolean done = dbService.queryExcute(query);
+            if (done) {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_FEEDBACK_REMOVED, requestName);
+            } else {
+                jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_ERROR, requestName);
+            }
+        } else {
+            jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
+        }
+        SendJsonData.sendJsonData(request, response, jsonObject);
+        dbService.databaseClose();
+    }
 }

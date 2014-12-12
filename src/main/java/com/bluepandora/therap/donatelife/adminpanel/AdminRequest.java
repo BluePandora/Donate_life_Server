@@ -18,5 +18,8 @@ public class AdminRequest {
     public static final String requestAppUserList="getAppUserList";
     public static final String requestHospitalList="getHospitalList";
     public static final String requestAdminLogin="adminLogin";
+    public static final String requestAddHospital="addHospital";
+    public static final String requestRemoveHospital="removeHospital";
+    public static final String requestRemoveFeedBack="removeFeedBack";
     
 }

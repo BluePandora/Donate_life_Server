@@ -40,29 +40,34 @@ public class AdminServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
-        Debug.debugLog("ADMIN SERVLET HITTED FROM: "  +  request.getRemoteAddr());
-
+        Debug.debugLog("ADMIN SERVLET HITTED FROM: " + request.getRemoteAddr());
+        
         if (request.getParameter("requestName") != null && request.getParameter("requestFrom") != null) {
             if (request.getParameter("requestFrom").equals("AdMiN")) {
-
                 String requestName = request.getParameter("requestName");
-
                 if (requestName.equals(AdminRequest.requestDonatorList)) {
                     AdminService.getDonatorList(request, response);
                 } else if (requestName.equals(AdminRequest.requestAdminList)) {
                     AdminService.getAdminList(request, response);
                 } else if (requestName.equals(AdminRequest.requestFeedBackList)) {
                     AdminService.getFeedBackList(request, response);
-                }else if(requestName.equals(AdminRequest.requestHospitalList)){
-                  AdminService.getHospitalList(request,response);
-                }else if(requestName.equals(AdminRequest.requestAdminLogin)){
+                } else if (requestName.equals(AdminRequest.requestHospitalList)) {
+                    AdminService.getHospitalList(request, response);
+                } else if (requestName.equals(AdminRequest.requestAdminLogin)) {
                     AdminService.adminLogin(request, response);
-                }
-                else {
+                } else if (requestName.equals(AdminRequest.requestAddHospital)) {
+                    AdminService.addHospital(request, response);
+                } else if (requestName.equals(AdminRequest.requestRemoveHospital)) {
+                    System.out.println("Remove Hospital");
+                    AdminService.removeHospital(request, response);
+                } else if (requestName.equals(AdminRequest.requestRemoveFeedBack)) {
+                    System.out.println("Remove Feedback");
+                    AdminService.removeFeedBack(request, response);
+                } else {
                     JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "UNKNOWN SERVICE NAME!");
                     SendJsonData.sendJsonData(request, response, jsonObject);
                 }
-                
+
             } else {
                 JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "UNAUTHORIZE ACCESS!");
                 SendJsonData.sendJsonData(request, response, jsonObject);
