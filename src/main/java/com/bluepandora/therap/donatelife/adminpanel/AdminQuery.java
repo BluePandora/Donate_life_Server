@@ -15,9 +15,9 @@ public class AdminQuery extends DbConstant {
 
     public static String adminLoginQuery(String idUser, String hashKey) {
         return "select * from ( (select first_name, last_name from "+T_PERSON+" where person_id="
-                + "(select person_id from "+T_ADMIN_PANEL+" where "
-                + "mobile_number='"+idUser+"' or email='"+idUser+"' and access_key='"+hashKey+"')) as pn join (select * from "+T_ADMIN_PANEL+" where " 
-                +"mobile_number='"+idUser+"' or email='"+idUser+"' and access_key='"+hashKey+"') as pro)";
+                + "(select person_id from "+T_ADMIN_PANEL+" where ("
+                + "mobile_number='"+idUser+"' or email='"+idUser+"') and access_key='"+hashKey+"')) as pn join (select * from "+T_ADMIN_PANEL+" where " 
+                +"(mobile_number='"+idUser+"' or email='"+idUser+"') and access_key='"+hashKey+"') as pro)";
     }
 
     public static String getDonatorListQuery() {
