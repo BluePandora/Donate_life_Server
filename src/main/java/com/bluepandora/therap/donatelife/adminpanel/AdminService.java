@@ -32,13 +32,13 @@ public class AdminService extends DbUser {
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
-        if (request.getParameter("username") != null && request.getParameter("accessKey") != null) {
-            String username = request.getParameter("username");
+        if (request.getParameter("idUser") != null && request.getParameter("accessKey") != null) {
+            String idUser = request.getParameter("idUser");
             String accessKey = request.getParameter("accessKey");
-            username = username.replace(" ", "");
+            idUser = idUser.replace(" ", "");
             accessKey = accessKey.replace(" ", "");
             String hashKey = DataValidation.encryptTheKeyWord(accessKey);
-            String query = AdminQuery.adminLoginQuery(username, hashKey);
+            String query = AdminQuery.adminLoginQuery(idUser, hashKey);
             ResultSet result = dbService.getResultSet(query);
             jsonObject = JsonBuilder.adminProfile(result);
         } else {
