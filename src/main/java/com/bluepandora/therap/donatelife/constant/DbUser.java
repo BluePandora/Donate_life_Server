@@ -21,7 +21,7 @@ public class DbUser {
 //  
     
     /**
-     * This is for openshift access
+     * This is for openshift database access parameter
      */
    
     public static final String USERNAME = "adminzeiBGMn";

@@ -15,6 +15,7 @@ import org.json.JSONObject;
 /**
  *
  * @author Biswajit Debnath
+ * Make a JSONObject of blood request from ResultSet
  */
 public class BloodRequestJson {
 

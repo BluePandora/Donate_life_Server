@@ -15,6 +15,7 @@ import org.json.JSONObject;
 /**
  *
  * @author Biswajit Debnath
+ * Get the Blood Group From Database and Make it a JSONObject
  */
 public class BloodGroupJson {
 

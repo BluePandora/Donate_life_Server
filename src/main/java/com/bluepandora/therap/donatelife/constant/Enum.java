@@ -8,6 +8,7 @@ package com.bluepandora.therap.donatelife.constant;
 /**
  *
  * @author Biswajit Debnath
+ * This class is for some constant value enumeration in project 
  */
 public class Enum {
 

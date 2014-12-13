@@ -12,7 +12,7 @@ package com.bluepandora.therap.donatelife.constant;
 public class DbConstant {
 
     /**
-     * This is for DbConstant
+     *  All table name of database schema life
      *
      */
     public static final String BD_SCHEMA = "life";

@@ -23,7 +23,7 @@ public class DatabaseService {
     Connection connection;
 
     public DatabaseService() {
-        databaseConnection = new DatabaseConnection("root", "root");
+        databaseConnection = new DatabaseConnection("default", "default");
     }
 
     public DatabaseService(String username, String password) {

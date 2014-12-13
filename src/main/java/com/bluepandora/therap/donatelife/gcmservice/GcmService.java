@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *
  * @author Biswajit Debnath
+ * These Class give the  GOOGLE cloud messaging service
  */
 public class GcmService {
 
@@ -65,6 +66,13 @@ public class GcmService {
         }
     }
 
+    /**
+     * 
+     * @param groupId
+     * @param hospitalId
+     * @param dbService
+     * @return This method make the message which will be send to donator
+     */
     private static String getMessage(String groupId, String hospitalId, DatabaseService dbService) {
         String query = GetQuery.getBloodGroupNameQuery(groupId);
         ResultSet result = dbService.getResultSet(query);
@@ -97,6 +105,14 @@ public class GcmService {
         return message;
     }
 
+    /**
+     * 
+     * @param request
+     * @param response
+     * @param donatorList
+     * @param donatorMessage 
+     * This method send the notification message to the donator
+     */
     private static void sendNotificationToDonator(HttpServletRequest request, HttpServletResponse response, List donatorList, String donatorMessage) {
 
         try {

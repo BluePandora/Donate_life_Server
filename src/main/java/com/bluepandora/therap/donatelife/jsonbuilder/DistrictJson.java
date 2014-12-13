@@ -15,6 +15,7 @@ import org.json.JSONObject;
 /**
  *
  * @author Biswajit Debnath
+ * Make a JSONObject of District Information from the ResultSet
  */
 public class DistrictJson {
 

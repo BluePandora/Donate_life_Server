@@ -11,6 +11,7 @@ import org.json.JSONObject;
 /**
  *
  * @author Biswajit Debnath
+ * Provide JSON Type Log message 
  */
 public class LogMessageJson {
 
@@ -29,6 +30,13 @@ public class LogMessageJson {
         return jsonObject;
     }
 
+    /**
+     * 
+     * @param logs
+     * @return
+     * @throws JSONException 
+     * This method takes array and make it a JSONObject
+     */
     public static JSONObject getLogMessageJson(Object... logs) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 

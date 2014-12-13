@@ -16,6 +16,7 @@ import org.json.JSONObject;
 /**
  *
  * @author Biswajit Debnath
+ * Make a JSONObject of donation record information from ResultSet
  */
 public class DonationRecordJson {
 
