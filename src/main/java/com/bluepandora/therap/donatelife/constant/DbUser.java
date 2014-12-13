@@ -24,8 +24,8 @@ public class DbUser {
      * This is for openshift database access parameter
      */
    
-    public static final String USERNAME = "adminzeiBGMn";
-    public static final String PASSWORD = "ZAh4_LlqmuMn";
+    public static final String USERNAME = "";
+    public static final String PASSWORD = "";
     public static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
     public static final String OPENSHIFT_MYSQL_DB_HOST= System.getenv("OPENSHIFT_MYSQL_DB_HOST");
     public static final String OPENSHIFT_MYSQL_DB_PORT= System.getenv("OPENSHIFT_MYSQL_DB_PORT");
