@@ -74,7 +74,7 @@ public class UserRegistrationService extends DbUser {
 
     public static void userRegistrationCheck(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
-        dbService.databaseOpen();
+
         JSONObject jsonObject;
         String requestName = request.getParameter("requestName");
 
@@ -82,6 +82,8 @@ public class UserRegistrationService extends DbUser {
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber)) {
+                dbService.databaseOpen();
+
                 boolean mobileNumberTaken = isMobileNumberTaken(mobileNumber, dbService);
                 if (mobileNumberTaken) {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.CORRECT, "done", Enum.CORRECT);
@@ -89,21 +91,24 @@ public class UserRegistrationService extends DbUser {
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "reg", Enum.ERROR, "done", Enum.CORRECT);
                 }
+
+                dbService.databaseClose();
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "done", Enum.ERROR, "message", Enum.MESSAGE_INVALID_VALUE);
             }
+
         } else {
             jsonObject = LogMessageJson.getLogMessageJson("requestName", requestName, "done", Enum.ERROR, "message", Enum.MESSAGE_LESS_PARAMETER);
         }
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
-        dbService.databaseClose();
+
     }
 
     public static void updateUserPersonalInfo(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
-        dbService.databaseOpen();
+
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
@@ -124,6 +129,8 @@ public class UserRegistrationService extends DbUser {
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord) && DataValidation.isValidLength(firstName, 45) && DataValidation.isValidLength(lastName, 45)) {
 
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+                dbService.databaseOpen();
+
                 boolean validUser = CheckService.isValidUser(mobileNumber, hashKey, dbService);
                 if (validUser) {
                     AddPersonName.addPersonName(firstName, lastName, dbService);
@@ -138,15 +145,18 @@ public class UserRegistrationService extends DbUser {
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER);
                 }
+
+                dbService.databaseClose();
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE);
             }
+
         } else {
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER);
         }
 
         jsonObject = RequestNameAdderJson.setRequestNameInJson(jsonObject, requestName);
         SendJsonData.sendJsonData(request, response, jsonObject);
-        dbService.databaseClose();
+
     }
 }
