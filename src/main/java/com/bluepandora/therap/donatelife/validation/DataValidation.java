@@ -90,6 +90,9 @@ public class DataValidation {
             System.out.println("DATA COUDN'T ENCRYTED!");
         }
         return hashKey;
-
+    }
+    
+    public static boolean isValidLength(String string,int strLength){
+        return string.length() <= strLength;
     }
 }

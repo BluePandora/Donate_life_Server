@@ -5,7 +5,6 @@
  */
 package com.bluepandora.therap.donatelife.service;
 
-
 import com.bluepandora.therap.donatelife.constant.DbUser;
 import com.bluepandora.therap.donatelife.constant.Enum;
 import com.bluepandora.therap.donatelife.database.DatabaseService;
@@ -25,9 +24,9 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class UserRegistrationService extends DbUser{
+public class UserRegistrationService extends DbUser {
 
-     public static void registerUser(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+    public static void registerUser(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         dbService.databaseOpen();
         String requestName = request.getParameter("requestName");
@@ -46,7 +45,7 @@ public class UserRegistrationService extends DbUser{
             String keyWord = request.getParameter("keyWord");
             String mobileNumber = request.getParameter("mobileNumber");
 
-            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord) && DataValidation.isValidLength(firstName, 45) && DataValidation.isValidLength(lastName, 45)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean mobileNumberTaken = CheckService.isMobileNumberTaken(mobileNumber, dbService);
                 if (mobileNumberTaken == false) {
@@ -73,7 +72,7 @@ public class UserRegistrationService extends DbUser{
         dbService.databaseClose();
     }
 
-   public static void userRegistrationCheck(HttpServletRequest request, HttpServletResponse response) throws JSONException {
+    public static void userRegistrationCheck(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         dbService.databaseOpen();
         JSONObject jsonObject;
@@ -101,7 +100,7 @@ public class UserRegistrationService extends DbUser{
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
     }
-    
+
     public static void updateUserPersonalInfo(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         dbService.databaseOpen();
@@ -122,7 +121,7 @@ public class UserRegistrationService extends DbUser{
             String keyWord = request.getParameter("keyWord");
             String mobileNumber = request.getParameter("mobileNumber");
 
-            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
+            if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord) && DataValidation.isValidLength(firstName, 45) && DataValidation.isValidLength(lastName, 45)) {
 
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
                 boolean validUser = CheckService.isValidUser(mobileNumber, hashKey, dbService);

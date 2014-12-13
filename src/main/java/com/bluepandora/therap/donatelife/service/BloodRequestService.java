@@ -5,9 +5,8 @@
  */
 package com.bluepandora.therap.donatelife.service;
 
-
-import  com.bluepandora.therap.donatelife.constant.Enum;
-import  com.bluepandora.therap.donatelife.constant.DbUser;
+import com.bluepandora.therap.donatelife.constant.Enum;
+import com.bluepandora.therap.donatelife.constant.DbUser;
 import com.bluepandora.therap.donatelife.database.DatabaseService;
 import com.bluepandora.therap.donatelife.database.GetQuery;
 import com.bluepandora.therap.donatelife.debug.Debug;
@@ -25,15 +24,14 @@ import org.json.JSONObject;
  *
  * @author Biswajit Debnath
  */
-public class BloodRequestService extends DbUser{
+public class BloodRequestService extends DbUser {
 
     public static void addBloodRequest(HttpServletRequest request, HttpServletResponse response) throws JSONException, ParseException {
-        
+
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
         dbService.databaseOpen();
-        
         deleteRequestTracker(Enum.MAX_DAY, dbService);
-        
+
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject;
         Debug.debugLog("RequestName: ", requestName);
@@ -56,6 +54,7 @@ public class BloodRequestService extends DbUser{
 
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidKeyWord(keyWord)) {
                 String hashKey = DataValidation.encryptTheKeyWord(keyWord);
+
                 boolean validUser = CheckService.isValidUser(mobileNumber, hashKey, dbService);
                 if (validUser) {
                     int userRequest = CheckService.requestTracker(mobileNumber, date, dbService);
@@ -93,6 +92,7 @@ public class BloodRequestService extends DbUser{
                 } else {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_USER, requestName);
                 }
+
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
@@ -102,11 +102,12 @@ public class BloodRequestService extends DbUser{
 
         SendJsonData.sendJsonData(request, response, jsonObject);
         dbService.databaseClose();
+
     }
 
     public static void removePersonBloodRequestTracker(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
-        dbService.databaseOpen();
+
         JSONObject jsonObject;
         String requestName = request.getParameter("requestName");
 
@@ -114,10 +115,12 @@ public class BloodRequestService extends DbUser{
             String mobileNumber = request.getParameter("mobileNumber");
 
             if (DataValidation.isValidMobileNumber(mobileNumber)) {
+                dbService.databaseOpen();
                 String query = GetQuery.removePersonBloodRequestTrackerQuery(mobileNumber);
                 dbService.queryExcute(query);
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, mobileNumber + Enum.MESSAGE_BLOOD_REQUEST_TRACKER_REMOVED, requestName);
                 Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE TRACKER SUCCESS");
+                dbService.databaseClose();
             } else {
                 jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_INVALID_VALUE, requestName);
             }
@@ -125,12 +128,12 @@ public class BloodRequestService extends DbUser{
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
         SendJsonData.sendJsonData(request, response, jsonObject);
-        dbService.databaseClose();
+
     }
 
     public static void removeBloodRequest(HttpServletRequest request, HttpServletResponse response) throws JSONException {
         DatabaseService dbService = new DatabaseService(DRIVER_NAME, DATABASE_URL, USERNAME, PASSWORD);
-        dbService.databaseOpen();
+
         String requestName = request.getParameter("requestName");
         JSONObject jsonObject = null;
 
@@ -140,7 +143,9 @@ public class BloodRequestService extends DbUser{
             if (DataValidation.isValidMobileNumber(mobileNumber) && DataValidation.isValidString(reqTime)) {
                 String query = GetQuery.removeBloodRequestQuery(mobileNumber, reqTime);
                 // Debug.debugLog("DELETE BLOOD REQUEST QUERY:", query);
+                dbService.databaseOpen();
                 boolean done = dbService.queryExcute(query);
+                dbService.databaseClose();
                 if (done) {
                     jsonObject = LogMessageJson.getLogMessageJson(Enum.CORRECT, Enum.MESSAGE_REMOVED_BLOOD_REQUEST, requestName);
                     Debug.debugLog("MOBILE NUMBER: ", mobileNumber, " REMOVE BLOOD REQUEST SUCCESS");
@@ -154,14 +159,14 @@ public class BloodRequestService extends DbUser{
             jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, Enum.MESSAGE_LESS_PARAMETER, requestName);
         }
         SendJsonData.sendJsonData(request, response, jsonObject);
-        dbService.databaseClose();
+
     }
 
     public static void deleteRequestTracker(int day, DatabaseService dbService) {
         String query = GetQuery.deleteBloodRequestTrackerQuery(day);
         boolean done = dbService.queryExcute(query);
         if (done) {
-            Debug.debugLog("REQUEST TRACKER BEFORE  " + com.bluepandora.therap.donatelife.constant.Enum.MAX_DAY + " DAYS IS DELETED");
+            Debug.debugLog("REQUEST TRACKER BEFORE  " + Enum.MAX_DAY + " DAYS IS DELETED");
         } else {
             Debug.debugLog("REQUEST TRACKER DELETION OCCURS ERROR!");
         }

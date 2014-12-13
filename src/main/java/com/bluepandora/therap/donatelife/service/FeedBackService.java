@@ -39,7 +39,7 @@ public class FeedBackService extends DbUser{
             String idUser = request.getParameter("idUser");
             String subject = request.getParameter("subject");
             String comment = request.getParameter("comment");
-            if (DataValidation.isValidString(idUser) && DataValidation.isValidString(subject) && DataValidation.isValidString(comment)) {
+            if (DataValidation.isValidString(idUser) && DataValidation.isValidString(subject) && DataValidation.isValidString(comment) && DataValidation.isValidLength(comment, 300)) {
                 String query = GetQuery.addFeedback(idUser, subject, comment);
                 boolean done = dbService.queryExcute(query);
                 if (done) {

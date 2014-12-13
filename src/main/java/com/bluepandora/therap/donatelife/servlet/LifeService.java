@@ -100,7 +100,7 @@ public class LifeService extends HttpServlet {
             }
         } catch (Exception error) {
             Debug.debugURL(request, response);
-            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "PROBLEM ARISE WITH YOUR REQUEST!");
+            JSONObject jsonObject = LogMessageJson.getLogMessageJson(Enum.ERROR, "PROBLEM ARISE WITH YOUR REQUEST IN SERVLET!");
             SendJsonData.sendJsonData(request, response, jsonObject);
         }
     }
